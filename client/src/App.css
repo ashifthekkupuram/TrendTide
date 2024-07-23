@@ -1,0 +1,159 @@
+/* Login and Register Shared styles */
+.auth {
+    width: 100%;
+    display: flex;
+}
+
+.auth-intro {
+    background-color: black;
+}
+
+.auth-intro-section {
+    display: flex;
+    gap: 237px;
+}
+
+.auth-intro-section .heading {
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    margin-top: 60px;
+    margin-left: 62px;
+}
+
+.auth-intro-section .caption {
+    color: white;
+    font-size: 28px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+    margin-top: -10px;
+    margin-left: 70px;
+}
+
+.auth-intro-section .logo {
+    width: 145px;
+    margin-top: 5px;
+    margin-right: 10px;
+}
+
+.auth-intro-section .quantum{
+    width: 571px;
+    margin-top: 116px;
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-bottom: 129px;
+}
+
+.auth-form {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+}
+
+.auth-form .form{
+    width: 546px;
+    border-radius: 20px;
+    display: flex;
+    flex-direction: column;
+    padding: 61px;
+    background-color: #FFFFFF;
+    border-radius: 20px;
+    box-shadow: 0px 10px 20px 0px rgba(0,0,0,0.1);
+}
+
+.auth-form .form h1{
+    font-size: 24px;
+    font-weight: bold;
+    margin: 0;
+    padding: 0;
+}
+
+.auth-form .form form{
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+}
+
+.auth-form .form form label{
+    font-size: 16px;
+    font-weight: 600;
+    margin-bottom: 8px;
+}
+
+.auth-form .form form input{
+    padding: 12px 24px;
+    font-size: 16px;
+    background-color: radial-gradient(rgba(255, 255, 255, 0.9),rgba(210, 210, 209, 1));
+    border: solid 2px #D2D2D1;
+    border-radius: 10px;
+    margin-bottom: 24px;
+    outline: none;
+    transition: 0.6s;
+}
+
+.auth-form .form form input:focus{
+    border-color: #4385F5;
+}
+
+.auth-form .form form .forgot{
+    font-size: 16px;
+    color: #4385F5;
+    text-decoration: none;
+    margin-bottom: 30.5px;
+}
+
+.auth-form .form form .forgot:hover{
+    color: #2b76f8;
+}
+
+.auth-form .form form div input{
+    height: 20px;
+    width: 20px;
+    margin: 0px;
+    padding: 0px;
+    margin-top: 5px;
+    margin-bottom: 30.5px;
+}
+
+.auth-form .form form div small{
+    font-size: 16px;
+    margin-left: 7px;
+}
+
+.auth-form .form form div button{
+    background-color: #4385F5;
+    border: none;
+    border-radius: 10px;
+    color: #FFFFFF;
+    padding: 12px 66px;
+    font-size: 16px;
+    margin-right: 16px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.auth-form .form form div button:hover{
+    background-color: #2b76f8;
+    cursor: pointer;
+}
+
+.auth-form .form form div button:disabled{
+    opacity: 0.8;
+    cursor: default;
+    background-color: #4385F5;
+}
+
+.auth-form .form form div .sign-up{
+    font-size: 16px;
+    font-weight: 500;
+    color: #4385F5;
+    text-decoration: none;
+}
+
+.auth-form .form form div .sign-up:hover{
+    color: #2b76f8;
+}
