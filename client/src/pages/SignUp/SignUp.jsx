@@ -45,11 +45,11 @@ const SignUp = () => {
           <h1>Login</h1>
           <form onSubmit={onSubmit}>
             <label htmlFor="email">Email Address*</label>
-            <input value={form.email} type="email" name="email" id="email" onChange={onChange} placeholder='Your email address' />
+            <input value={form.email} type="email" name="email" id="email" onChange={onChange} autoComplete={false} placeholder='Your email address' />
             <label htmlFor="password1">Password*</label>
-            <input value={form.password1} type="password" name="password1" id="password1" onChange={onChange} placeholder='•••••••••••••' />
+            <input value={form.password1} type="password" name="password1" id="password1" onChange={onChange} autoComplete={false} placeholder='•••••••••••••' />
             <label htmlFor="password2">Repeat Password*</label>
-            <input value={form.password2} type="password" name="password2" id="password2" onChange={onChange} placeholder='•••••••••••••' />
+            <input value={form.password2} type="password" name="password2" id="password2" onChange={onChange} autoComplete={false} placeholder='•••••••••••••' />
             <div>
               <input value={terms} onChange={(e) => setTerms(prev => !prev)} type="checkbox" />
               <small>Agree to our terms of service</small>

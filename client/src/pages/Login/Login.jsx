@@ -41,9 +41,9 @@ const Login = () => {
           <h1>Login</h1>
           <form onSubmit={onSubmit}>
             <label htmlFor="email">Email*</label>
-            <input value={form.email} type="email" name="email" id="email" onChange={onChange} placeholder='Your email address' />
+            <input value={form.email} type="email" name="email" id="email" onChange={onChange} autoComplete={false} placeholder='Your email address' />
             <label htmlFor="password">Password*</label>
-            <input value={form.password} type="password" name="password" id="password" onChange={onChange} placeholder='•••••••••••••' />
+            <input value={form.password} type="password" name="password" id="password" onChange={onChange} autoComplete={false} placeholder='•••••••••••••' />
             <a className='forgot' href='#'>Forgot your password?</a>
             <div>
               <button disabled={!form.email || !form.password}>Log in</button>
