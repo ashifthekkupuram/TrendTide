@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { Logo, Quantum } from '../../assets/images'
+import Hero from '../../components/Hero'
 
 import './SignUp.css'
 
@@ -27,19 +28,7 @@ const SignUp = () => {
 
   return (
     <div className='auth'>
-      <div className='auth-intro'>
-        <div className='auth-intro-section'>
-          <h1 className='heading'>TrendTide</h1>
-          <img className='logo' src={Logo} alt='logo' />
-        </div>
-        <div className='auth-intro-section'>
-          <h1 className='caption'>Online Community makes <br /> 
-          people more Creative</h1>
-        </div>
-        <div className='auth-intro-section'>
-          <img className='quantum' src={Quantum} alt='quantum' />
-        </div>
-      </div>
+      <Hero />
       <div className='auth-form'>
         <div className='form'>
           <h1>Login</h1>

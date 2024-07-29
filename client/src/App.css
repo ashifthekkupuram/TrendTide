@@ -72,6 +72,16 @@
     padding: 0;
 }
 
+.auth-form .form p{
+    color: #5D5F63;
+}
+
+.auth-form .form img{
+    width: 120px;
+    margin-left: 35%;
+   
+}
+
 .auth-form .form form{
     margin-top: 30px;
     display: flex;

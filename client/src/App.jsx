@@ -2,7 +2,7 @@ import { createBrowserRouter,RouterProvider,Link } from 'react-router-dom'
 
 import './App.css'
 
-import { Login, SignUp } from './pages'
+import { Login, SignUp, ResetPassword, ResetConfirmPassword, VerifyAccount } from './pages'
 
 function App() {
 
@@ -22,6 +22,19 @@ function App() {
     {
       path: '/sign-up',
       element: <SignUp />
+    },
+    {
+      path: '/reset-password',
+      element: <ResetPassword />
+    },
+    {
+      path: '/reset-confirm-password',
+      element: <ResetConfirmPassword />
+    },
+
+    {
+      path: '/verify-account',
+      element: <VerifyAccount />
     }
   ])
 
