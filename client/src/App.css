@@ -172,3 +172,33 @@
 .auth-form .form form div .sign-up:hover{
     color: #2b76f8;
 }
+
+.auth-form .form form .password-matching{
+    margin-bottom: 10px;
+    margin-top: -18px;
+    color: red;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.4s
+}
+
+.auth-form .form form .password-hide{
+    display: none;
+}
+
+.auth-form .form .error {
+    color: #721c24;
+    margin-top: 10px;
+    background-color: #f8d7da;
+    padding: 0.75rem 1.25rem;
+    border: 1px solid #f5c6cb;
+    border-radius: 0.25rem;
+    transition: 0.3s;
+    margin-bottom: -10px;
+    font-size: 1rem;
+}
+
+/* Add this to your global CSS file or relevant CSS module */
+.Toastify__toast-container {
+    z-index: 9999 !important;
+  }

@@ -3,11 +3,14 @@ import dotenv from 'dotenv'
 import jwt from 'jsonwebtoken'
 
 import User from '../models/user.model.js'
+import Verification from '../models/verification.model.js'
+import ResetPassword from '../models/resetPassword.model.js'
+import transporter from '../utils/sendEmail.js'
 
 dotenv.config()
 
 const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
-const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]{8,}$/
+const PASSWORD_REGEX = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d\S]{8,}$/
 
 const ACCESS_SECRET_KEY = process.env.ACCESS_SECRET_KEY
 const REFRESH_SECRET_KEY = process.env.REFRESH_SECRET_KEY
@@ -41,7 +44,7 @@ export const login =  async (req, res, next) => {
             })
         }
 
-        if(!user.verfied){
+        if(!user.verified){
             return res.status(400).json({
                 success: false,
                 message: 'Account not verified'
@@ -58,15 +61,22 @@ export const login =  async (req, res, next) => {
 
         const refreshToken = jwt.sign({ _id: user._id }, REFRESH_SECRET_KEY, {expiresIn: '1d'})
 
-        return res.cookie('jwt', refreshToken, {
+        res.cookie('jwt', refreshToken, {
             httpOnly: true,
             secure: true,
             sameSite: 'None',
             maxAge: 1 * 24 * 60 * 60 * 1000
-        }).json({
+        })
+
+        return res.json({
             success: true,
             message: 'Logged in successfully',
-            accessToken
+            accessToken,
+            userData: {
+                email: user.email,
+                username: user.username,
+                profile: user.profile
+            }
         })
 
     }catch(err){
@@ -109,7 +119,7 @@ export const register = async (req, res, next) => {
         if (!password.match(PASSWORD_REGEX)) {
             return res.status(400).json({
                 success: false,
-                message: 'Invalid password'
+                message: 'Password should at least 8 characters long, contains at least one letter and one digit, and includes no whitespace, allowing for special characters'
             })
         }
 
@@ -120,11 +130,25 @@ export const register = async (req, res, next) => {
                     password: hashedPassword
                 })
 
+                const verification = new Verification({
+                    user,
+                })
+
+                await verification.save()
+
                 await user.save()
+
+                await transporter.sendMail({
+                    from: `"Trend Tide" <${process.env.EMAIL}>`, // sender address
+                    to: user.email, // list of receivers
+                    subject: "Account Verification", // Subject line
+                    text: "Verify your account or Delete your account if it's not you", // plain text body
+                    html: `<h1><a href="${process.env.FRONTEND_URL}/verification/${verification.token}" >Click Here</a></h1>`, // html body
+                  });
 
                 return res.status(200).json({
                     success: true,
-                    message: 'User has been created'
+                    message: 'User has been created. Check your email for Verification!'
                 })
             } else {
                 return res.status(400).json({
@@ -182,7 +206,7 @@ export const refresh = async (req, res, next) => {
                 const accessToken = jwt.sign(
                     { "UserInfo": {
                         _id: foundUser._id,
-                        email: foundUser.email.toLowerCase(),
+                        email: foundUser.email,
                         username: foundUser.username
                     } },
                     ACCESS_SECRET_KEY,
@@ -192,7 +216,11 @@ export const refresh = async (req, res, next) => {
                 return res.json({
                     success: true,
                     accessToken,
-                    user: { username: foundUser.username, createdAt: foundUser.createdAt }
+                    userData: {
+                        email: foundUser.email,
+                        username: foundUser.username,
+                        profile: foundUser.profile
+                    }
                 })
 
             }
@@ -217,6 +245,318 @@ export const logout = async (req, res, next) => {
         res.clearCookie('jwt', { httpOnly: true, secure: true, sameSite: 'None' })
 
         res.json({success: true, message: 'Cookie cleared'})
+
+    } catch (err) {
+        return res.status(400).json({
+            success: false,
+            message: "Something went wrong",
+            error: err
+        })
+    }
+}
+
+export const verification_get = async (req, res, next) => {
+    try{
+
+        const { token } = req.params
+
+        if(!token){
+            return res.status(400).json({
+                success: false,
+                message: "Verification token is required",
+            })
+        }
+
+        const verification = await Verification.findOne({token})
+
+        if(!verification){
+            return res.status(400).json({
+                success: false,
+                message: "Verification not found",
+            })
+        }
+
+        if(verification.expired){
+            return res.status(400).json({
+                success: false,
+                message: "Expired",
+            })
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'Verification is not expired'
+        })
+
+    } catch (err) {
+        return res.status(400).json({
+            success: false,
+            message: "Something went wrong",
+            error: err
+        })
+    }
+}
+
+export const verification_post = async (req, res, next) => {
+    try{
+
+        const { token } = req.params
+
+        if(!token){
+            return res.status(400).json({
+                success: false,
+                message: "Verification token is required",
+            })
+        }
+
+        const verification = await Verification.findOne({token})
+
+        if(!verification){
+            return res.status(400).json({
+                success: false,
+                message: "Verification not found",
+            })
+        }
+
+        if(verification.expired){
+            return res.status(400).json({
+                success: false,
+                message: "Expired",
+            })
+        }
+
+        const user = await User.findById(verification.user)
+
+        if(!user){
+            return res.status(400).json({
+                success: false,
+                message: "User not found",
+            }) 
+        }
+
+        await User.findByIdAndUpdate(verification.user, { verified: true })
+
+        await Verification.updateMany({ user: verification.user }, { expired: true })
+
+        return res.status(200).json({
+            success: true,
+            message: 'Account Activated'
+        })
+
+    } catch (err) {
+        return res.status(400).json({
+            success: false,
+            message: "Something went wrong",
+            error: err
+        })
+    }
+}
+
+export const verification_delete = async (req, res, next) => {
+    try{
+
+        const { token } = req.params
+
+        if(!token){
+            return res.status(400).json({
+                success: false,
+                message: "Verification token is required",
+            })
+        }
+
+        const verification = await Verification.findOne({token})
+
+        if(!verification){
+            return res.status(400).json({
+                success: false,
+                message: "Verification not found",
+            })
+        }
+
+        if(verification.expired){
+            return res.status(400).json({
+                success: false,
+                message: "Expired",
+            })
+        }
+
+        const user = await User.findById(verification.user)
+
+        if(!user){
+            return res.status(400).json({
+                success: false,
+                message: "User not found",
+            }) 
+        }
+
+        await User.findByIdAndDelete(verification.user)
+
+        await Verification.updateMany({ user: verification.user }, { expired: true })
+
+        return res.status(200).json({
+            success: true,
+            message: 'Account Deleted'
+        })
+
+    } catch (err) {
+        return res.status(400).json({
+            success: false,
+            message: "Something went wrong",
+            error: err
+        })
+    }
+}
+
+export const reset_password_create = async (req, res, next) => {
+    try{
+
+        const { email } = req.body
+
+        const user = await User.findOne({email: email.toLowerCase()})
+
+        if(!user){
+            return res.status(400).json({
+                success: false,
+                message: 'User not found'
+            })
+        }
+
+        await ResetPassword.updateMany({user}, { expired: true })
+
+        const reset_password = new ResetPassword({
+            user,
+        })
+
+        await reset_password.save()
+
+        await transporter.sendMail({
+            from: `"Trend Tide" <${process.env.EMAIL}>`, // sender address
+            to: user.email, // list of receivers
+            subject: "Account Reset Password", // Subject line
+            text: "Click here to reset your password", // plain text body
+            html: `<h1><a href="${process.env.FRONTEND_URL}/reset-confirm-password/${reset_password.token}" >Click Here</a></h1>`, // html body
+          });
+
+        return res.status(200).json({
+            success: true,
+            message: 'Check your email to reset password!'
+        })
+
+    } catch (err) {
+        return res.status(400).json({
+            success: false,
+            message: "Something went wrong",
+            error: err
+        })
+    }
+}
+
+export const reset_password_get = async (req, res, next) => {
+    try{
+
+        const { token } = req.params
+
+        if(!token){
+            return res.status(400).json({
+                success: false,
+                message: "Reset password token is required",
+            })
+        }
+
+        const reset_password = await ResetPassword.findOne({token})
+
+        if(!reset_password){
+            return res.status(400).json({
+                success: false,
+                message: "reset password not found",
+            })
+        }
+
+        if(reset_password.expired){
+            return res.status(400).json({
+                success: false,
+                message: "Expired",
+            })
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'Not expired'
+        })
+
+    } catch (err) {
+        return res.status(400).json({
+            success: false,
+            message: "Something went wrong",
+            error: err
+        })
+    }
+}
+
+export const reset_password_post = async (req, res, next) => {
+    try{
+
+        const { token } = req.params
+        const { password } = req.body
+
+        if(!token){
+            return res.status(400).json({
+                success: false,
+                message: "Reset password token is required",
+            })
+        }
+
+        const reset_password = await ResetPassword.findOne({token})
+
+        if(!reset_password){
+            return res.status(400).json({
+                success: false,
+                message: "reset password not found",
+            })
+        }
+
+        if(reset_password.expired){
+            return res.status(400).json({
+                success: false,
+                message: "Expired",
+            })
+        }
+
+        const user = await User.findById(reset_password.user)
+
+        if(!user){
+            return res.status(400).json({
+                success: false,
+                message: "User not found",
+            }) 
+        }
+
+        if(!password.match(PASSWORD_REGEX)){
+            return res.status(400).json({
+                success: false,
+                message: 'Password should at least 8 characters long, contains at least one letter and one digit, and includes no whitespace, allowing for special characters(try again by refreshing)',
+            }) 
+        }
+
+        bcrypt.hash(password, 12, async (err, hashedPassword) => {
+            if (!err) {
+
+                await User.findByIdAndUpdate(reset_password.user, {password: hashedPassword})
+
+                await ResetPassword.updateMany({ user: reset_password.user }, { expired: true })
+
+                return res.status(200).json({
+                    success: true,
+                    message: 'Password has been updated'
+                })
+            } else {
+                return res.status(400).json({
+                    success: false,
+                    message: "Something went wrong",
+                    error: err
+                })
+            }
+        })
 
     } catch (err) {
         return res.status(400).json({

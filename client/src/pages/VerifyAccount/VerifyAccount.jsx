@@ -1,12 +1,15 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 
 import Hero from '../../components/Hero'
 
 import './VerifyAccount.css'
 import Result from '../../components/Result'
+import axios from '../../api/axios'
 
 const VerifyAccount = () => {
 
+    const { token } = useParams()
     const [hover, setHover] = useState(false)
     const [result, setResult] = useState({
         result: false,
@@ -15,15 +18,48 @@ const VerifyAccount = () => {
         description: ''
     })
 
-    const onVerify = (e) => {
-        e.prevent.default()
-        setResult({...result, result: true, success: true})
+    const onVerify = async (e) => {
+        e.preventDefault()
+        try{
+          const response = await axios.post(`/auth/verify/${token}`)
+          setResult({ result: true, success: true, message: response.data.message, description: 'Account seem to be activated' })
+        } catch (err) {
+          if(err?.response){
+            setResult({ result: true, success: false, message: err.response.data.message, description: 'Seems like its not working' })
+          }else{
+            setResult({ result: true, success: false, message: 'Internal Server Error', description: 'Seems like its not working' })
+          }
+        }
     }
 
-    const onDelete = (e) => {
-        e.prevent.default()
-        setResult({...result, result: true, success: false})
+    const onDelete = async (e) => {
+      e.preventDefault()
+      try{
+        const response = await axios.delete(`/auth/verify/${token}`)
+        setResult({ result: true, success: true, message: response.data.message, description: 'Account seem to be deleted' })
+      } catch (err) {
+        if(err?.response){
+          setResult({ result: true, success: false, message: err.response.data.message, description: 'Seems like its not working' })
+        }else{
+          setResult({ result: true, success: false, message: 'Internal Server Error', description: 'Seems like its not working' })
+        }
+      }
     }
+
+    useEffect(()=>{
+      const verifyGET = async () => {
+        try{
+          await axios.get(`/auth/verify/${token}`)
+        } catch (err) {
+          if(err?.response){
+            setResult({ result: true, success: false, message: err.response.data.message, description: 'Seems like its not working' })
+          }else{
+            setResult({ result: true, success: false, message: 'Internal Server Error', description: 'Seems like its not working' })
+          }
+        }
+      }
+      verifyGET()
+    },[token])
 
   return (
     <div className='auth'>
@@ -35,8 +71,8 @@ const VerifyAccount = () => {
             <p>The Verify button validates and confirms a user's account, while the Delete button permanently removes the user's account and associated data. </p>
             <form>
                 <div>
-                    <button onSubmit={onVerify}>Verify</button>
-                    <button onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={{backgroundColor: hover ? '#F82B2B' :'#F54343'}} onSubmit={onDelete}>Delete</button>
+                    <button onClick={onVerify}>Verify</button>
+                    <button onMouseEnter={() => setHover(true)} onMouseLeave={() => setHover(false)} style={{backgroundColor: hover ? '#F82B2B' :'#F54343'}} onClick={onDelete}>Delete</button>
                 </div>
             </form>
             </>}

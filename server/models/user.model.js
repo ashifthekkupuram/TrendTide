@@ -17,20 +17,23 @@ const UserSchema = new Schema({
         unique: true,
         required: true,
         minLength: 4,
-        maxLength: 25
+        maxLength: 25,
+        default: 'Default name'
     },
     name: {
-        fristName: {
+        firstName: {
             type: String,
             required: true,
             minLength: 3,
-            maxLength: 25
+            maxLength: 25,
+            default: 'Default first name'
         },
         secondName: {
             type: String,
             required: true,
             minLength: 3,
-            maxLength: 25
+            maxLength: 25,
+            default: 'Default second name'
         }
     },
     gender: {
@@ -51,7 +54,7 @@ const UserSchema = new Schema({
             default: false
         }
     },
-    verfied: {
+    verified: {
         type: Boolean,
         default: false
     },
@@ -72,7 +75,7 @@ UserSchema.pre('save', async function(next){
         let username = baseUsername
         let counter = 1
 
-        user.name.fristName =  name.split(' ')[0]
+        user.name.firstName =  name.split(' ')[0]
         user.name.secondName =  name.split(' ')[1]
 
         const User = mongoose.model('User', UserSchema);
