@@ -25,18 +25,19 @@ const Login = () => {
     setForm({ ...form, [e.target.id]: e.target.value })
   }
 
-  const onSubmit = (e) => {
+  const onSubmit = async (e) => {
     setLoading(true)
     setError(null)
     e.preventDefault()
-    dispatch(login({...form})).then((result) => {
+    console.log('Befour sign up '+loading)
+    const result = await dispatch(login({...form}))
       if(result.payload.success){
         navigate('/')
       }else{
         setError(result.payload.message)
-      }
-    })
+    }
     setLoading(false)
+    console.log('After sign up '+loading)
   }
 
   return (
