@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
 import { Form, Container, Button, Image } from 'react-bootstrap'
 
-import Hero from '../components/Hero'
 import Result from '../components/Result'
 import axios from '../api/axios'
 import { LogoBlack, Connection } from '../assets/images'

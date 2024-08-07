@@ -415,9 +415,9 @@ export const reset_password_create = async (req, res, next) => {
         const user = await User.findOne({email: email.toLowerCase()})
 
         if(!user){
-            return res.status(400).json({
+            return res.status(404).json({
                 success: false,
-                message: 'User not found'
+                message: 'Account with email does not exist'
             })
         }
 
@@ -532,9 +532,9 @@ export const reset_password_post = async (req, res, next) => {
         }
 
         if(!password.match(PASSWORD_REGEX)){
-            return res.status(400).json({
+            return res.status(406).json({
                 success: false,
-                message: 'Password should at least 8 characters long, contains at least one letter and one digit, and includes no whitespace, allowing for special characters(try again by refreshing)',
+                message: 'Password should at least 8 characters long, contains at least one letter and one digit, and includes no whitespace, allowing for special characters.',
             }) 
         }
 

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
-import { Form, Container, Button, Image } from 'react-bootstrap'
+import { Form, Container, Button, Image, Alert } from 'react-bootstrap'
 
 import Result from '../components/Result'
 import axios from '../api/axios'
@@ -20,8 +20,10 @@ const ResetConfirmPassword = () => {
         description: ''
     })
     const [loading, setLoading] = useState(false)
+    const [error, setError] = useState('')
 
     const onSubmit = async (e) => {
+        setError('')
         setLoading(true)
         e.preventDefault()
         try{
@@ -29,7 +31,11 @@ const ResetConfirmPassword = () => {
           setResult({ result: true, success: true, message: response.data.message, description: 'Password seem to be updated' })
         } catch (err) {
           if(err?.response){
-            setResult({ result: true, success: false, message: err.response.data.message, description: 'Seems like its not working' })
+            if(err.response?.status === 406){
+              setError(err.response.data.message)
+            }else{
+              setResult({ result: true, success: false, message: err.response.data.message, description: 'Seems like its not working' })
+            }
           }else{
             setResult({ result: true, success: false, message: 'Internal Server Error', description: 'Seems like its not working' })
           }
@@ -65,6 +71,7 @@ const ResetConfirmPassword = () => {
         <Container style={{ maxWidth: '700px', maxHeight: '700px', backgroundColor: '#FFFFFF', padding: '80px 50px' }} className='bg-form rounded shadow'>
           <Image src={LogoBlack} style={{ display: 'block', width: '180px', marginBottom: '20px', marginTop: '-30px' }} className='d-xl-none mx-auto' />
           <h1 className='mb-4'>Reset Your Password</h1>
+          {error && <Alert variant='danger'>{error}.</Alert>}
           <Form onSubmit={onSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Password</Form.Label>

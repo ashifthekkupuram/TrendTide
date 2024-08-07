@@ -49,7 +49,7 @@ const Login = () => {
         <Container style={{maxWidth: '700px',maxHeight: '700px', backgroundColor: '#FFFFFF', padding: '80px 50px' }} className='bg-form rounded shadow'>
           <Image src={LogoBlack} style={{display: 'block', width: '180px', marginBottom: '20px', marginTop: '-30px' }} className='d-xl-none mx-auto' />
           <h1 className='mb-4'>Log in</h1>
-          {error && <Alert variant='danger'>{error}</Alert>}
+          {error && <Alert variant='danger'>{error}.</Alert>}
           <Form onSubmit={onSubmit}>
             <Form.Group className="mb-3">
               <Form.Label>Email address</Form.Label>
