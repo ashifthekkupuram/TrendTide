@@ -8,6 +8,7 @@ import { Form, Container, Button, Alert, Image } from 'react-bootstrap'
 import { login } from '../redux/slice/authSlice'
 import { LogoBlack, Connection } from '../assets/images';
 
+const EMAIL_REGEX = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/
 
 const Login = () => {
 
@@ -54,6 +55,7 @@ const Login = () => {
             <Form.Group className="mb-3">
               <Form.Label>Email address</Form.Label>
               <Form.Control style={{ height: '50px' }} type="email" value={form.email} id='email' name='email' placeholder="Your email address" onChange={onChange} />
+              { (form.email && !form.email.match(EMAIL_REGEX))  && <Form.Text style={{color: 'red'}} >*invalid email</Form.Text> }
             </Form.Group>
             <Form.Group className="mb-3">
               <Form.Label>Password</Form.Label>
