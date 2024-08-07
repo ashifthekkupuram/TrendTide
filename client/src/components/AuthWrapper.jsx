@@ -1,6 +1,8 @@
 import React,{ useEffect } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate, Outlet } from 'react-router-dom'
+import { ToastContainer } from 'react-bootstrap'
+import 'react-toastify/dist/ReactToastify.css';
 
 import { refresh } from '../redux/slice/authSlice'
 
@@ -20,7 +22,10 @@ const AuthWrapper = () => {
     },[])
 
   return (
-    <Outlet />
+    <>
+      <Outlet />
+      <ToastContainer />
+    </>
   )
 }
 

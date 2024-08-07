@@ -1,8 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
-import { ToastContainer } from 'react-toastify'
-import 'react-toastify/dist/ReactToastify.css';
 import { Form, Container, Button, Alert, Image } from 'react-bootstrap'
 
 import { login } from '../redux/slice/authSlice'
@@ -41,7 +39,7 @@ const Login = () => {
   }
 
   return (
-    <Container className='d-flex vh-100 w-100 p-0' fluid >
+      <Container className='d-flex vh-100 w-100 p-0' fluid >
       <Container style={{ padding: '50px', flex: 1 }} className='d-none d-xl-flex flex-column align-items-center vh-100 w-50' fluid>
         <Image src={LogoBlack} style={{ width: '150px', marginRight: 'auto' }} />
         <Image src={Connection} style={{ maxWidth: '500px', margin: 'auto' }} />
@@ -63,13 +61,13 @@ const Login = () => {
             </Form.Group>
             <Link style={{ display: 'inline-block', marginBottom: '10px', textDecoration: 'none' }} to='/reset-password'>Forgot your password?</Link>
             <div>
-              <Button style={{ width: '100px' }} disabled={!form.email || !form.password || loading} type="submit" id='button' >{loading ? 'Loading...' : 'Log in'}</ Button>
+              <Button style={{ width: '100px' }} disabled={!form.email || !form.password || !form.email.match(EMAIL_REGEX) || loading} type="submit" id='button' >{loading ? 'Loading...' : 'Log in'}</ Button>
               <Link style={{ display: 'inline-block', marginLeft: '10px', textDecoration: 'none', fontWeight: '500' }} to='/sign-up'>Sign up</Link>
             </div>
           </Form>
         </Container>
       </Container>
-    </Container>
+     </Container>
   )
 }
 
