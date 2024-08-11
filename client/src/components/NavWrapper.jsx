@@ -1,12 +1,12 @@
 import React from 'react'
 import { Outlet } from 'react-router-dom'
 
-import Nav from './Nav'
+import NavigationBar from './NavigationBar'
 
 const NavWrapper = () => {
   return (
     <>
-      <Nav />
+      <NavigationBar />
       <Outlet />
     </>
   )
