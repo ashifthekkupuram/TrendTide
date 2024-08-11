@@ -3,8 +3,10 @@ import { createBrowserRouter, RouterProvider, Link } from 'react-router-dom'
 
 import './App.css'
 
-import { Login, SignUp, ResetPassword, ResetConfirmPassword, VerifyAccount } from './pages'
+import { Home, Login, SignUp, ResetPassword, ResetConfirmPassword, VerifyAccount } from './pages'
 import AuthWrapper from './components/AuthWrapper.jsx'
+import AuthRedirect from './components/AuthRedirect.jsx'
+import NavWrapper from './components/NavWrapper.jsx'
 
 function App() {
 
@@ -15,32 +17,40 @@ function App() {
       children: [
         {
           path: '/',
-          element: <>
-            <h1>Home</h1> <br />
-            <Link to='/login'>Login</Link><br />
-            <Link to='/sign-up'>Sing up</Link>
-          </>
+          element: <NavWrapper />,
+          children: [
+            {
+              path: '/',
+              element: <Home />
+            }
+          ]
         },
         {
-          path: '/login',
-          element: <Login />
-        },
-        {
-          path: '/sign-up',
-          element: <SignUp />
-        },
-        {
-          path: '/reset-password',
-          element: <ResetPassword />
-        },
-        {
-          path: '/reset-confirm-password/:token',
-          element: <ResetConfirmPassword />
-        },
-    
-        {
-          path: '/verification/:token',
-          element: <VerifyAccount />
+          path: '',
+          element: <AuthRedirect />,
+          children : [
+            {
+              path: '/login',
+              element: <Login />
+            },
+            {
+              path: '/sign-up',
+              element: <SignUp />
+            },
+            {
+              path: '/reset-password',
+              element: <ResetPassword />
+            },
+            {
+              path: '/reset-confirm-password/:token',
+              element: <ResetConfirmPassword />
+            },
+        
+            {
+              path: '/verification/:token',
+              element: <VerifyAccount />
+            }
+          ]
         }
       ]
     }
