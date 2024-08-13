@@ -58,7 +58,7 @@ export const create_post = async (req, res, next) => {
         const { caption } = req.body
         const image = req.file
 
-        if( !image || !caption.trim() ){
+        if( !image && !caption.trim() ){
             return res.status(400).json({
                 success: false,
                 message: 'Caption or Image is required'
