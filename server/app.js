@@ -1,10 +1,13 @@
 import express from 'express'
 import dotenv from 'dotenv'
-import cookieParser from 'cookie-parser';
+import cookieParser from 'cookie-parser'
 import cors from 'cors'
+import fs from 'fs'
+import path from "path"
 
-import { CONNECT_DB } from './utils/database.js';
-import corsOptions from './config/corsOptions.js';
+import { CONNECT_DB } from './utils/database.js'
+import corsOptions from './config/corsOptions.js'
+import { getDirName } from './utils/getDirName.js'
 
 import AuthRouter from './routes/auth.route.js'
 import PostRouter from './routes/post.route.js'
@@ -15,10 +18,19 @@ const PORT = process.env.PORT || 5000
 
 const app =  express()
 
+const __dirname = getDirName(import.meta.url);
+
+const uploadsDir = path.join(__dirname, "images");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir);
+}
+
 app.use(cors(corsOptions))
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser())
+
+app.use("/images", express.static(uploadsDir));
 
 CONNECT_DB()
 

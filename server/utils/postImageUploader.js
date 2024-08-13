@@ -29,7 +29,7 @@ const storage = multer.diskStorage({
         const mimeType = fileTypes.test(file.mimetype);
     
         if (extname && mimeType) {
-          done(null, file.fieldname + "-" + prefix + `.${path.extname(file.originalname)}`);
+          done(null, file.fieldname + "-" + prefix + path.extname(file.originalname));
         } else {
           const error = new Error("File type not supported");
           error.status = 400;
