@@ -1,12 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { Button } from  'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { Navbar, Container, NavDropdown, Form, Nav } from 'react-bootstrap'
+import { TiHome } from "react-icons/ti";
+import { MdFeed, MdHome } from "react-icons/md";
 
 import { logout } from '../redux/slice/authSlice'
 
 const NavigationBar = () => {
 
+  // const [selectedItem, setSelectedItem] = useState('')
   const dispatch = useDispatch()
   const { token, UserData } = useSelector((state) => state.auth)
 
@@ -17,6 +20,10 @@ const NavigationBar = () => {
       console.log('Logout failed')
     }
   }
+
+  // const onSelect = (eventKey) => {
+  //   setSelectedItem(eventKey)
+  // }
 
   return (
     <Navbar expand="lg" className="bg-body-tertiary">
@@ -33,15 +40,9 @@ const NavigationBar = () => {
             { token ? 
             <>
               <Nav.Link onClick={onLogout}>Logout</Nav.Link>
-              <NavDropdown title="Link" id="navbarScrollingDropdown">
-                <NavDropdown.Item href="#action3">Action</NavDropdown.Item>
-                <NavDropdown.Item href="#action4">
-                Another action
-                </NavDropdown.Item>
-                <NavDropdown.Divider />
-                <NavDropdown.Item href="#action5">
-                Something else here
-                </NavDropdown.Item>
+              <NavDropdown style={{backgroundColor: '#FFFFFF'}} className='rounded' title='Select' id="navbarScrollingDropdown">
+                <NavDropdown.Item className='d-flex' eventKey='Home' href='/'><MdHome style={{fontSize: '20px', marginRight: '5px'}} />Home</NavDropdown.Item>
+                <NavDropdown.Item className='d-flex' eventKey='Feed' href='/'><MdFeed style={{fontSize: '20px', marginRight: '5px'}} />Feed</NavDropdown.Item>
               </NavDropdown> 
             </> :
             <>
