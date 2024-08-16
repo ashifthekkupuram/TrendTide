@@ -7,7 +7,7 @@ import Post from '../components/Post'
 
 const Home = () => {
 
-  const [posts, setPosts] = useState({ search: '', posts: [] })
+  const [posts, setPosts] = useState([])
   const [error, setError] = useState(null)
   const [loading, setLoading] = useState(false)
 
@@ -17,7 +17,7 @@ const Home = () => {
     const fetchPosts = async () => {
       try {
         const response = await axios.get('/post')
-        setPosts({...posts, posts: response.data.posts})
+        setPosts(response.data.posts)
         console.log(response.data.posts)
       } catch (err) {
         if(err.response){
@@ -36,7 +36,7 @@ const Home = () => {
     <Container className='d-flex flex-column justify-content-start align-items-center mt-4 gap-3'>
       {loading ? <Spinner />: error ? <h1 style={{fontSize: '50px', color: 'red'}}>{error}</h1> :
         <>
-          { posts.posts ? posts.posts.map((item) => <Post key={item._id} post={item} setPosts={setPosts} posts={posts} />) : <h1 style={{fontSize: '50px', color: 'red'}}>There is not posts</h1> }
+          { posts ? posts.map((item) => <Post key={item._id} post={item} setPosts={setPosts} posts={posts} />) : <h1 style={{fontSize: '50px', color: 'red'}}>There is no posts</h1> }
         </>
       }
     </Container>

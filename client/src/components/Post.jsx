@@ -17,15 +17,21 @@ const Post = ({post, posts, setPosts}) => {
       const response = await axios.post(`/post/like/${post._id}`, {}, {headers: {
         authorization:`Bearer ${token}` 
       }})
-        setPosts(prevPosts => ({
-          ...prevPosts,
-          posts: prevPosts.posts.map(p =>
-            p._id === post._id ? {
-              ...p,
-              likes: response.data.liked ? [...p.likes, { _id: UserData._id,name: UserData.name, username: UserData.username }] : p.likes.filter(like => like._id !== UserData._id)
-            } : p
-          )
-        }));
+
+      const updatedPost = posts.map(p => 
+      {
+        if(p._id === post._id){
+          if(response.data.liked){
+            return {...p, likes: [...p.likes, {_id: UserData._id, username: UserData.username, name: UserData.name, profile: UserData.profile}]}
+          }else{
+            return {...p, likes: p.likes.filter(like => like._id !== UserData._id)}
+          }
+        }
+        return p
+      }
+      )
+      setPosts(updatedPost)
+      
     } catch(err) {
       if(err.response){
         console.log(err.response.data.message)
