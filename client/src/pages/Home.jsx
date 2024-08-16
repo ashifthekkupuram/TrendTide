@@ -18,6 +18,7 @@ const Home = () => {
       try {
         const response = await axios.get('/post')
         setPosts({...posts, posts: response.data.posts})
+        // console.log(response.data.posts)
       } catch (err) {
         if(err.response){
           setError(err.response.data.message)
