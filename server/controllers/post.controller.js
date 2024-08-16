@@ -104,3 +104,55 @@ export const create_post = async (req, res, next) => {
         })
     }
 }
+
+export const post_like = async (req, res, next) => {
+    try{
+
+        const { postId } = req.params
+
+        const post = await Post.findById(postId).populate('likes', 'username name profile')
+
+        const user = await User.findById(jwt.decode(req.token).UserInfo._id)
+
+        if(!post){
+            return res.status(400).json({
+                success: false,
+                message: 'User is not found'
+            })
+        }
+
+        if(!user){
+            return res.status(400).json({
+                success: false,
+                message: 'User is not found'
+            })
+        }
+
+        if(post.likes.includes(user._id)){
+            post.likes.pull(user._id)
+            await post.save()
+
+            return res.status(200).json({
+                success: true,
+                message: 'Post unliked successfully',
+                liked: false,
+            })
+        }else{
+            post.likes.push(user._id)
+            await post.save()
+
+            return res.status(200).json({
+                success: true,
+                message: 'Post likes successfully',
+                liked: true
+            })
+        }
+
+    } catch(err) {
+        return res.status(400).json({
+            success: false,
+            message: 'Something went wrong',
+            error: err
+        })
+    }
+}
