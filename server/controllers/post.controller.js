@@ -110,7 +110,7 @@ export const post_like = async (req, res, next) => {
 
         const { postId } = req.params
 
-        const post = await Post.findById(postId).populate('likes', 'username name profile')
+        const post = await Post.findById(postId)
 
         const user = await User.findById(jwt.decode(req.token).UserInfo._id)
 

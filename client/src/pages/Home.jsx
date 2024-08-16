@@ -18,7 +18,7 @@ const Home = () => {
       try {
         const response = await axios.get('/post')
         setPosts({...posts, posts: response.data.posts})
-        // console.log(response.data.posts)
+        console.log(response.data.posts)
       } catch (err) {
         if(err.response){
           setError(err.response.data.message)
@@ -36,7 +36,7 @@ const Home = () => {
     <Container className='d-flex flex-column justify-content-start align-items-center mt-4 gap-3'>
       {loading ? <Spinner />: error ? <h1 style={{fontSize: '50px', color: 'red'}}>{error}</h1> :
         <>
-          { posts.posts ? posts.posts.map((item) => <Post key={item._id} post={item} />) : <h1 style={{fontSize: '50px', color: 'red'}}>There is not posts</h1> }
+          { posts.posts ? posts.posts.map((item) => <Post key={item._id} post={item} setPosts={setPosts} posts={posts} />) : <h1 style={{fontSize: '50px', color: 'red'}}>There is not posts</h1> }
         </>
       }
     </Container>

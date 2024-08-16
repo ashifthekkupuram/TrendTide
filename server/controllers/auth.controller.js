@@ -26,7 +26,7 @@ export const login =  async (req, res, next) => {
             })
         }
 
-        const user = await User.findOne({ email })
+        const user = await User.findOne({ email }).populate('name')
 
         if(!user){
             return res.status(400).json({
@@ -55,7 +55,8 @@ export const login =  async (req, res, next) => {
             'UserInfo': {
                 _id: user._id,
                 email: user.email,
-                username: user.username
+                username: user.username,
+                name: user.name
             }
         }, ACCESS_SECRET_KEY, {expiresIn: '5m'} )
 
@@ -194,7 +195,7 @@ export const refresh = async (req, res, next) => {
                     })
                 }
 
-                const foundUser = await User.findById(decoded._id)
+                const foundUser = await User.findById(decoded._id).populate('name')
 
                 if(!foundUser){
                     return res.status(401).json({
@@ -207,7 +208,8 @@ export const refresh = async (req, res, next) => {
                     { "UserInfo": {
                         _id: foundUser._id,
                         email: foundUser.email,
-                        username: foundUser.username
+                        username: foundUser.username,
+                        name: foundUser.name
                     } },
                     ACCESS_SECRET_KEY,
                     {expiresIn: '5m'}

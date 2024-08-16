@@ -1,8 +1,44 @@
-import React from 'react'
-import { Card, Container, Image } from 'react-bootstrap'
-import { AiOutlineLike } from "react-icons/ai";
+import React, { useState } from 'react'
+import { Card, Container, Image, Spinner  } from 'react-bootstrap'
+import { AiOutlineLike, AiFillLike  } from "react-icons/ai";
+import { useSelector } from 'react-redux'
 
-const Post = ({post}) => {
+import axios from '../api/axios'
+
+const Post = ({post, posts, setPosts}) => {
+
+  // const likeController = new AbortController()
+  const { token, UserData } = useSelector((state) => state.auth)
+  const [likeLoading, setLikeLoading] = useState(false)
+
+  const onLike = async () => {
+    setLikeLoading(true)
+    try{
+      const response = await axios.post(`/post/like/${post._id}`, {}, {headers: {
+        authorization:`Bearer ${token}` 
+      }})
+        setPosts(prevPosts => ({
+          ...prevPosts,
+          posts: prevPosts.posts.map(p =>
+            p._id === post._id ? {
+              ...p,
+              likes: response.data.liked ? [...p.likes, { _id: UserData._id,name: UserData.name, username: UserData.username }] : p.likes.filter(like => like._id !== UserData._id)
+            } : p
+          )
+        }));
+    } catch(err) {
+      if(err.response){
+        console.log(err.response.data.message)
+      }else{
+        console.log('Internal Server Error')
+      }
+    } finally {
+      setLikeLoading(false)
+    }
+  }
+
+  const hasLiked = post.likes.some(like => like._id === UserData._id);
+
   return (
     <Card style={{ width: '100%' }}>
       <Card.Header>
@@ -17,7 +53,7 @@ const Post = ({post}) => {
       </Card.Body>
       <Card.Footer>
         <Container style={{fontSize: '20px', fontWeight: '500'}} className='d-flex align-items-center gap-2'>
-        <AiOutlineLike style={{fontSize: '26px'}} />
+        {likeLoading ? <Spinner style={{width: '20px', height: '20px'}} /> :hasLiked ? <AiFillLike onClick={onLike} style={{fontSize: '26px'}} />  : <AiOutlineLike onClick={onLike} style={{fontSize: '26px'}} />}
         {post.likes.length}
         </Container>
       </Card.Footer>
