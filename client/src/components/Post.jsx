@@ -4,13 +4,9 @@ import { Card, Button } from 'react-bootstrap'
 const Post = ({post}) => {
   return (
     <Card style={{ width: '18rem' }}>
-      <Card.Img variant="top" src="holder.js/100px180" />
+      { post.image && <Card.Img variant="top" src={`${import.meta.env.VITE_BACKEND_URL}/images/posts/${post.image}`} /> }
       <Card.Body>
-        <Card.Title>{post.caption}</Card.Title>
-        <Card.Text>
-          Some quick example text to build on the card title and make up the
-          bulk of the card's content.
-        </Card.Text>
+        { post.caption && <Card.Title>{post.caption}</Card.Title> }
         <Button variant="primary">Go somewhere</Button>
       </Card.Body>
     </Card>

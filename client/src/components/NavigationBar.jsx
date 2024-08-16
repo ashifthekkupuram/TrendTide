@@ -26,7 +26,7 @@ const NavigationBar = () => {
   // }
 
   return (
-    <Navbar expand="lg" className="bg-body-tertiary">
+    <Navbar sticky='top' expand="lg" className="bg-body-tertiary">
       <Container fluid>
         <Navbar.Brand href="/">TrendTide</Navbar.Brand>
         <Navbar.Toggle aria-controls="navbarScroll" />
