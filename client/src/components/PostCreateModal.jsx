@@ -6,6 +6,8 @@ const PostCreateModal = ({ showPostCreateModal, setShowPostCreateModal }) => {
 
     const [caption, setCaption] = useState('')
     const [image, setImage] = useState(null)
+    const [loading, setLoading] = useState(false)
+    const [error, setError] = useState(null)
 
     const ImageInputRef = useRef()
 
@@ -14,7 +16,28 @@ const PostCreateModal = ({ showPostCreateModal, setShowPostCreateModal }) => {
     }
 
     const onChangeCaption = (e) => setCaption(e.target.value)
-    const onChangeImage = (e) => setImage(e.target.files[0])
+    const onChangeImage = (e) => {
+        const file = setImage(e.target.files[0])
+        if(file){
+            setImage(file)
+        }
+    }
+    const onRemoveImage = () => {
+        if(ImageInputRef.current){
+            ImageInputRef.current.value = null
+            setImage(null)
+        }
+    }
+
+    const TriggerFileInput = () => {
+        if(ImageInputRef.current){
+            ImageInputRef.current.click()
+        }
+    }
+
+    const onSubmit = async () => {
+        
+    }
 
     return (
         <Modal show={showPostCreateModal} onHide={onClose}>
@@ -30,10 +53,11 @@ const PostCreateModal = ({ showPostCreateModal, setShowPostCreateModal }) => {
                         <Form.Control ref={ImageInputRef} style={{ display: 'none' }} className='' type="file" id='image' name='image' onChange={onChangeImage} />
                         { image ? 
                         <>
-                            {/* <Image src={} /> */}
+                            <Image src={URL.createObjectURL(image)} fluid/>
+                            <Button style={{marginTop: '3px'}} variant='danger' onClick={onRemoveImage} >Remove Image</Button>
                         </> : 
                         <>
-                            <Button variant='success' onClick={() => {ImageInputRef.current.click()}} ><GrGallery />  Image</Button>
+                            <Button className='d-flex justify-content-center align-items-center gap-2' variant='success' onClick={TriggerFileInput} ><GrGallery />Image</Button>
                         </> }
                     </Form.Group>
                 </Form>
@@ -42,8 +66,8 @@ const PostCreateModal = ({ showPostCreateModal, setShowPostCreateModal }) => {
                 <Button variant="secondary" onClick={onClose}>
                     Close
                 </Button>
-                <Button variant="primary" onClick={onClose}>
-                    Create
+                <Button disabled={(!caption && !image || loading)} variant="primary" onClick={onClose}>
+                    { loading ? 'Loading...' : 'Create' }
                 </Button>
             </Modal.Footer>
         </Modal>
