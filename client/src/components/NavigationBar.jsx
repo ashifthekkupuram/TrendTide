@@ -7,7 +7,7 @@ import { MdFeed, MdHome } from "react-icons/md";
 
 import { logout } from '../redux/slice/authSlice'
 
-const NavigationBar = () => {
+const NavigationBar = ({ setShowPostCreateModal }) => {
 
   // const [selectedItem, setSelectedItem] = useState('')
   const dispatch = useDispatch()
@@ -38,7 +38,8 @@ const NavigationBar = () => {
           >
             <Nav.Link href="/">Home</Nav.Link>
             { token ? 
-            <>
+            <>  
+              <Nav.Link onClick={(e)=>setShowPostCreateModal(true)}>Create</Nav.Link>
               <Nav.Link onClick={onLogout}>Logout</Nav.Link>
               <NavDropdown style={{backgroundColor: '#FFFFFF'}} className='rounded' title='Select' id="navbarScrollingDropdown">
                 <NavDropdown.Item className='d-flex' eventKey='Home' href='/'><MdHome style={{fontSize: '20px', marginRight: '5px'}} />Home</NavDropdown.Item>
