@@ -74,9 +74,11 @@ export const login =  async (req, res, next) => {
             message: 'Logged in successfully',
             accessToken,
             userData: {
+                _id: user._id,
                 email: user.email,
                 username: user.username,
-                profile: user.profile
+                profile: user.profile,
+                name: foundUser.name
             }
         })
 
@@ -219,9 +221,11 @@ export const refresh = async (req, res, next) => {
                     success: true,
                     accessToken,
                     userData: {
+                        _id: foundUser._id,
                         email: foundUser.email,
                         username: foundUser.username,
-                        profile: foundUser.profile
+                        profile: foundUser.profile,
+                        name: foundUser.name
                     }
                 })
 

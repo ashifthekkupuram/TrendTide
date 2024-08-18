@@ -22,7 +22,7 @@ const Post = ({post, posts, setPosts}) => {
       {
         if(p._id === post._id){
           if(response.data.liked){
-            return {...p, likes: [...p.likes, {_id: UserData._id, username: UserData.username, name: UserData.name, profile: UserData.profile}]}
+            return {...p, likes: [...p.likes, {name: UserData.name, _id: UserData._id, username: UserData.username, profile: UserData.profile}]}
           }else{
             return {...p, likes: p.likes.filter(like => like._id !== UserData._id)}
           }
@@ -30,6 +30,7 @@ const Post = ({post, posts, setPosts}) => {
         return p
       }
       )
+
       setPosts(updatedPost)
       
     } catch(err) {
@@ -59,7 +60,7 @@ const Post = ({post, posts, setPosts}) => {
       </Card.Body>
       <Card.Footer>
         <Container style={{fontSize: '20px', fontWeight: '500'}} className='d-flex align-items-center gap-2'>
-        {likeLoading ? <Spinner style={{width: '20px', height: '20px'}} /> :hasLiked ? <AiFillLike onClick={onLike} style={{fontSize: '26px'}} />  : <AiOutlineLike onClick={onLike} style={{fontSize: '26px'}} />}
+        {likeLoading ? <Spinner style={{width: '20px', height: '20px'}} /> :hasLiked ? <AiFillLike onClick={onLike} style={{fontSize: '26px'}} role='button' />  : <AiOutlineLike onClick={onLike} style={{fontSize: '26px'}} role='button' />}
         {post.likes.length}
         </Container>
       </Card.Footer>
