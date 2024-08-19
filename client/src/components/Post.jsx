@@ -1,13 +1,15 @@
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { Card, Container, Image, Spinner  } from 'react-bootstrap'
 import { AiOutlineLike, AiFillLike  } from "react-icons/ai";
-import { useSelector } from 'react-redux'
 
 import axios from '../api/axios'
+import { updatePost } from '../redux/slice/postsSlice';
 
-const Post = ({post, posts, setPosts}) => {
+const Post = ({ post }) => {
 
-  // const likeController = new AbortController()
+  const dispatch = useDispatch()
+  const posts = useSelector((state) => state.posts)
   const { token, UserData } = useSelector((state) => state.auth)
   const [likeLoading, setLikeLoading] = useState(false)
 
@@ -18,26 +20,23 @@ const Post = ({post, posts, setPosts}) => {
         authorization:`Bearer ${token}` 
       }})
 
-      const updatedPost = posts.map(p => 
-      {
-        if(p._id === post._id){
-          if(response.data.liked){
-            return {...p, likes: [...p.likes, {name: UserData.name, _id: UserData._id, username: UserData.username, profile: UserData.profile}]}
-          }else{
-            return {...p, likes: p.likes.filter(like => like._id !== UserData._id)}
-          }
-        }
-        return p
-      }
-      )
+      const updatedPost = {
+        ...post,
+        likes: response.data.liked
+          ? [...post.likes, { name: UserData.name, _id: UserData._id, username: UserData.username, profile: UserData.profile }]
+          : post.likes.filter(like => like._id !== UserData._id)
+      };
 
-      setPosts(updatedPost)
+      dispatch(updatePost(updatedPost))
+
+      console.log(posts)
       
     } catch(err) {
       if(err.response){
         console.log(err.response.data.message)
       }else{
         console.log('Internal Server Error')
+        console.log(err)
       }
     } finally {
       setLikeLoading(false)

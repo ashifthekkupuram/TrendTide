@@ -1,6 +1,9 @@
 import React, { useState, useRef } from 'react'
+import { useSelector, useDispatch } from 'react-redux';
 import { Button, Modal, Form, Image } from 'react-bootstrap'
 import { GrGallery } from "react-icons/gr";
+
+import axios from '../api/axios';
 
 const PostCreateModal = ({ showPostCreateModal, setShowPostCreateModal }) => {
 
@@ -8,6 +11,8 @@ const PostCreateModal = ({ showPostCreateModal, setShowPostCreateModal }) => {
     const [image, setImage] = useState(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
+
+    const { token } = useSelector( (state) => state.auth )
 
     const ImageInputRef = useRef()
 
@@ -36,7 +41,35 @@ const PostCreateModal = ({ showPostCreateModal, setShowPostCreateModal }) => {
     }
 
     const onSubmit = async () => {
-        
+        setLoading(true)
+        setError(null)
+        try{
+            const formData = new FormData()
+
+            if(caption) formData.append('caption', caption)
+            if(image) formData.append('image',image)
+            
+
+            const response = await axios.post('/post', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'authorization': `Bearer ${token}`
+                }
+            })
+
+            setShowPostCreateModal(false)
+
+        } catch(err) {
+
+            if(err.response){
+                setError(err.response.data.message)
+            }else{
+                setError('Internal Server Error')
+            }
+
+        } finally {
+            setLoading(false)
+        }
     }
 
     return (
@@ -66,7 +99,7 @@ const PostCreateModal = ({ showPostCreateModal, setShowPostCreateModal }) => {
                 <Button variant="secondary" onClick={onClose}>
                     Close
                 </Button>
-                <Button disabled={(!caption && !image || loading)} variant="primary" onClick={onClose}>
+                <Button disabled={(!caption && !image || loading)} variant="primary" onClick={onSubmit}>
                     { loading ? 'Loading...' : 'Create' }
                 </Button>
             </Modal.Footer>
