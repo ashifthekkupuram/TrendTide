@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Card, Container, Image, Spinner  } from 'react-bootstrap'
+import { Button, Card, Container, Image, Spinner  } from 'react-bootstrap'
 import { AiOutlineLike, AiFillLike  } from "react-icons/ai";
 
 import axios from '../api/axios'
@@ -61,6 +61,7 @@ const Post = ({ post }) => {
         <Container style={{fontSize: '20px', fontWeight: '500'}} className='d-flex align-items-center gap-2'>
         {likeLoading ? <Spinner style={{width: '20px', height: '20px'}} /> :hasLiked ? <AiFillLike onClick={onLike} style={{fontSize: '26px'}} role='button' />  : <AiOutlineLike onClick={onLike} style={{fontSize: '26px'}} role='button' />}
         {post.likes.length}
+        <Button> view </Button>
         </Container>
       </Card.Footer>
     </Card>
