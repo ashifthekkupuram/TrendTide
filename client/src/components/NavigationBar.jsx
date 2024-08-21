@@ -40,7 +40,6 @@ const NavigationBar = ({ setShowCommentSectionModal }) => {
             { token ? 
             <>  
               <Nav.Link onClick={(e)=>setShowPostCreateModal(true)}>Create</Nav.Link>
-              <Nav.Link onClick={(e)=>setShowCommentSectionModal(true)}>View</Nav.Link>
               <Nav.Link onClick={onLogout}>Logout</Nav.Link>
               <NavDropdown style={{backgroundColor: '#FFFFFF'}} className='rounded' title='Select' id="navbarScrollingDropdown">
                 <NavDropdown.Item className='d-flex' eventKey='Home' href='/'><MdHome style={{fontSize: '20px', marginRight: '5px'}} />Home</NavDropdown.Item>

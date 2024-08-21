@@ -8,7 +8,7 @@ import CommentSectionModal from './CommentSectionModal'
 const NavWrapper = () => {
 
   const [showPostCreateModal, setShowPostCreateModal] = useState(false)
-  const [showCommentSectionModal, setShowCommentSectionModal] = useState(false)
+  const [showCommentSectionModal, setShowCommentSectionModal] = useState({ show: false ,postId: null })
 
   return (
     <>
@@ -19,5 +19,9 @@ const NavWrapper = () => {
     </>
   )
 }
+
+// export const ChangeComment = (condition, postId) => {
+//   setShowCommentSectionModal({show: true, postId})
+// }
 
 export default NavWrapper

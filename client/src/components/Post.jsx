@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Container, Image, Spinner  } from 'react-bootstrap'
 import { AiOutlineLike, AiFillLike  } from "react-icons/ai";
+import { MdOutlineModeComment } from "react-icons/md";
 
 import axios from '../api/axios'
 import { updatePost } from '../redux/slice/postsSlice';
@@ -43,6 +44,10 @@ const Post = ({ post }) => {
     }
   }
 
+  const onCommentClick = (e) => {
+
+  }
+
   const hasLiked = post.likes.some(like => like._id === UserData._id);
 
   return (
@@ -61,7 +66,7 @@ const Post = ({ post }) => {
         <Container style={{fontSize: '20px', fontWeight: '500'}} className='d-flex align-items-center gap-2'>
         {likeLoading ? <Spinner style={{width: '20px', height: '20px'}} /> :hasLiked ? <AiFillLike onClick={onLike} style={{fontSize: '26px'}} role='button' />  : <AiOutlineLike onClick={onLike} style={{fontSize: '26px'}} role='button' />}
         {post.likes.length}
-        <Button> view </Button>
+        <MdOutlineModeComment style={{marginLeft: '5px',fontSize: '26px'}} onClick={onCommentClick} />
         </Container>
       </Card.Footer>
     </Card>

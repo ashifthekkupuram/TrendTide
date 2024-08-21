@@ -2,22 +2,24 @@ import React, { useEffect, useState } from 'react'
 import { Modal, Button, Spinner, Form, InputGroup } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 import { IoSendSharp } from "react-icons/io5";
+import { toast } from 'react-toastify'
 
 import axios from '../api/axios'
+import Comment from './Comment';
 
-const CommentSectionModal = ({ postId = '66bdbf0ae8658c1706994364', showCommentSectionModal, setShowCommentSectionModal }) => {
+const CommentSectionModal = ({ showCommentSectionModal, setShowCommentSectionModal }) => {
 
   const [comments, setComments] = useState([])
   const [comment, setComment] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
-  const [commentLoading, setCommentLoading] = useState(true)
+  const [commentLoading, setCommentLoading] = useState(false)
 
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const { token } = useSelector((state) => state.auth)
 
   const onClose = () => {
-    setShowCommentSectionModal(false)
+    setShowCommentSectionModal({ show: false, postId: null })
   }
 
   const onChange = (e) => {
@@ -33,14 +35,17 @@ const CommentSectionModal = ({ postId = '66bdbf0ae8658c1706994364', showCommentS
         }
       })
 
+      toast.success(response.data.message)
+
+      setComments([...comments, response.data.comment])
       setComment('')
 
     } catch (err) {
       
       if(err.response){
-        
+        toast.error(err.response.data.message)
       } else {
-        
+        toast.error('Internal Server Error')
       }
 
     } finally {
@@ -49,7 +54,7 @@ const CommentSectionModal = ({ postId = '66bdbf0ae8658c1706994364', showCommentS
   }
 
   useEffect(() => {
-    if (showCommentSectionModal) {
+    if (showCommentSectionModal.show) {
       setLoading(true)
       setError(null)
       const fetchPost = async () => {
@@ -68,16 +73,16 @@ const CommentSectionModal = ({ postId = '66bdbf0ae8658c1706994364', showCommentS
       }
       fetchPost()
     }
-  }, [postId])
+  }, [showCommentSectionModal])
 
   return (
-    <Modal style={{ width: '100%' }} show={showCommentSectionModal} onHide={onClose} >
+    <Modal style={{ width: '100%' }} show={showCommentSectionModal.show} onHide={onClose} >
       <Modal.Header closeButton>
         <Modal.Title>Post Detail</Modal.Title>
       </Modal.Header>
       {loading ? <Spinner className='d-flex justify-content-center align-items-center m-5' /> : error ? <Modal.Body >{err}</Modal.Body> :
-        <Modal.Body>{comments.length > 0 ? comments.map((item) => {
-          return <p>{item.text}</p>
+        <Modal.Body className='d-flex flex-column gap-1' style={{maxHeight: 'calc(100vh - 210px)', overflowY: 'auto'}}>{comments.length > 0 ? comments.map((item) => {
+          return <Comment key={item._id} comment={item} />
         }) : <h5 className='d-flex justify-content-center align-items-center'>No comment were added</h5>}</Modal.Body>}
       <Modal.Footer className=''>
         {token && <InputGroup className='gap-1'>
