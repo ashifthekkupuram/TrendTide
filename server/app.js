@@ -11,6 +11,7 @@ import { getDirName } from './utils/getDirName.js'
 
 import AuthRouter from './routes/auth.route.js'
 import PostRouter from './routes/post.route.js'
+import CommentRouter from './routes/comment.route.js'
 
 dotenv.config()
 
@@ -36,6 +37,7 @@ CONNECT_DB()
 
 app.use('/api/auth', AuthRouter)
 app.use('/api/post', PostRouter)
+app.use('/api/comment', CommentRouter)
 
 app.listen(PORT, () => {
     console.log(`Server running at port ${PORT}`)
