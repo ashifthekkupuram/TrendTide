@@ -6,20 +6,22 @@ import { toast } from 'react-toastify'
 
 import axios from '../api/axios'
 import Comment from './Comment';
+import { showModal, fetchComments, addComment } from '../redux/slice/commentsSlice';
 
-const CommentSectionModal = ({ showCommentSectionModal, setShowCommentSectionModal }) => {
+const CommentSectionModal = () => {
 
-  const [comments, setComments] = useState([])
   const [comment, setComment] = useState('')
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState(null)
   const [commentLoading, setCommentLoading] = useState(false)
 
-  // const dispatch = useDispatch()
+  const dispatch = useDispatch()
+
+  const { showComments, comments, postId } = useSelector((state) => state.comments)
   const { token } = useSelector((state) => state.auth)
 
   const onClose = () => {
-    setShowCommentSectionModal({ show: false, postId: null })
+    dispatch(showModal({showComments: false, postId: ''}))
   }
 
   const onChange = (e) => {
@@ -37,7 +39,7 @@ const CommentSectionModal = ({ showCommentSectionModal, setShowCommentSectionMod
 
       toast.success(response.data.message)
 
-      setComments([...comments, response.data.comment])
+      dispatch(addComment(response.data.comment))
       setComment('')
 
     } catch (err) {
@@ -54,40 +56,34 @@ const CommentSectionModal = ({ showCommentSectionModal, setShowCommentSectionMod
   }
 
   useEffect(() => {
-    if (showCommentSectionModal.show) {
+    if (showComments) {
       setLoading(true)
       setError(null)
       const fetchPost = async () => {
-        try {
-          const response = await axios.get(`/comment/${postId}`)
-          setComments(response.data.comments)
-        } catch (err) {
-          if (err.response) {
-            setError(err.response.data.message)
-          } else {
-            setError('Internal Server Error')
-          }
-        } finally {
-          setLoading(false)
+        const result = await dispatch(fetchComments({postId}))
+        console.log(result.comments)
+        if(!result.success){
+          setError(result.message)
         }
+        setLoading(false)
       }
       fetchPost()
     }
-  }, [showCommentSectionModal])
+  }, [showComments, postId])
 
   return (
-    <Modal style={{ width: '100%' }} show={showCommentSectionModal.show} onHide={onClose} >
+    <Modal style={{ width: '100%' }} show={showComments} onHide={onClose} >
       <Modal.Header closeButton>
         <Modal.Title>Post Detail</Modal.Title>
       </Modal.Header>
       {loading ? <Spinner className='d-flex justify-content-center align-items-center m-5' /> : error ? <Modal.Body >{err}</Modal.Body> :
-        <Modal.Body className='d-flex flex-column gap-1' style={{maxHeight: 'calc(100vh - 210px)', overflowY: 'auto'}}>{comments.length > 0 ? comments.map((item) => {
+        <Modal.Body className='d-flex flex-column gap-1' style={{maxHeight: 'calc(100vh - 210px)', overflowY: 'auto'}}>{Array.isArray(comments) && comments.length > 0 ? comments.map((item) => {
           return <Comment key={item._id} comment={item} />
         }) : <h5 className='d-flex justify-content-center align-items-center'>No comment were added</h5>}</Modal.Body>}
       <Modal.Footer className=''>
         {token && <InputGroup className='gap-1'>
           <Form.Control style={{ border: 'none' }} className='shadow-none' type='text' value={comment} name='comment' id='comment' onChange={onChange} placeholder='Write a comment...' />
-          <Button className='rounded-circle' disabled={!comment.trim() || commentLoading} onClick={onSubmit} >{ commentLoading ? <Spinner style={{color: 'White', width: '15px', height: '15px'}} />: <IoSendSharp />  }</Button>
+          <Button className='rounded-circle' disabled={!comment.trim() || commentLoading || loading || error} onClick={onSubmit} >{ commentLoading ? <Spinner style={{color: 'White', width: '15px', height: '15px'}} />: <IoSendSharp />  }</Button>
         </InputGroup>}
       </Modal.Footer>
     </Modal>

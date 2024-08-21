@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
+import { useSelector } from 'react-redux'
 
 import NavigationBar from './NavigationBar'
 import PostCreateModal from './PostCreateModal'
@@ -8,14 +9,14 @@ import CommentSectionModal from './CommentSectionModal'
 const NavWrapper = () => {
 
   const [showPostCreateModal, setShowPostCreateModal] = useState(false)
-  const [showCommentSectionModal, setShowCommentSectionModal] = useState({ show: false ,postId: null })
+  const { showComments } = useSelector((state) => state.comments)
 
   return (
     <>
-      <NavigationBar setShowPostCreateModal={setShowPostCreateModal} setShowCommentSectionModal={setShowCommentSectionModal} />
+      <NavigationBar setShowPostCreateModal={setShowPostCreateModal} />
       <Outlet />
       <PostCreateModal showPostCreateModal={showPostCreateModal} setShowPostCreateModal={setShowPostCreateModal} />
-      <CommentSectionModal showCommentSectionModal={showCommentSectionModal} setShowCommentSectionModal={setShowCommentSectionModal} />
+      <CommentSectionModal />
     </>
   )
 }

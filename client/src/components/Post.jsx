@@ -6,12 +6,14 @@ import { MdOutlineModeComment } from "react-icons/md";
 
 import axios from '../api/axios'
 import { updatePost } from '../redux/slice/postsSlice';
+import { showModal } from '../redux/slice/commentsSlice';
 
 const Post = ({ post }) => {
 
   const dispatch = useDispatch()
   const posts = useSelector((state) => state.posts)
   const { token, UserData } = useSelector((state) => state.auth)
+
   const [likeLoading, setLikeLoading] = useState(false)
 
   const onLike = async () => {
@@ -45,7 +47,7 @@ const Post = ({ post }) => {
   }
 
   const onCommentClick = (e) => {
-
+    dispatch(showModal({showComments: true, postId: post._id}))
   }
 
   const hasLiked = post.likes.some(like => like._id === UserData._id);
