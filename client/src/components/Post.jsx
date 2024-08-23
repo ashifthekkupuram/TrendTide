@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Card, Container, Image, Spinner  } from 'react-bootstrap'
+import { Button, Card, Container, Image, Spinner, Dropdown  } from 'react-bootstrap'
 import { AiOutlineLike, AiFillLike  } from "react-icons/ai";
 import { MdOutlineModeComment } from "react-icons/md";
 
@@ -54,11 +54,20 @@ const Post = ({ post }) => {
 
   return (
     <Card style={{ width: '100%' }}>
-      <Card.Header>
+      <Card.Header className='d-flex justify-content-between align-items-center'>
         <Container style={{fontSize: '20px', fontWeight: '600'}} className='d-flex align-items-center gap-2'>
         <Image style={{width: '36px'}} src={post.author.profile} className='rounded' />
         {post.author.name.firstName} {post.author.name.secondName}
         </Container>
+        <Dropdown>
+          <Dropdown.Toggle className='' variant="link" id="dropdown-basic">
+          •••
+          </Dropdown.Toggle>
+          <Dropdown.Menu>
+            <Dropdown.Item href="#/action-1">Edit Post</Dropdown.Item>
+            <Dropdown.Item href="#/action-2">Delete Post</Dropdown.Item>
+          </Dropdown.Menu>
+        </Dropdown>
       </Card.Header>
       { post.image && <Card.Img variant="top" src={`${import.meta.env.VITE_BACKEND_URL}/images/posts/${post.image}`} /> }
       <Card.Body>
