@@ -105,6 +105,83 @@ export const create_post = async (req, res, next) => {
     }
 }
 
+export const update_post = async (req, res, next) => {
+    try{
+
+        const { caption, removeImage } = req.body
+        const { postId } = req.params
+
+        if(!caption){
+            return res.status(400).json({
+                success: false,
+                message: 'caption must have a character'
+            })
+        }
+
+        const post = await Post.findById(postId)
+
+        if(!post){
+            return res.status(404).json({
+                success: false,
+                message: 'Post not found'
+            })
+        }
+
+        const updatedData = {
+            caption: caption.trim()
+        }
+
+        if(removeImage){
+            updatedData.$unset = { image: '' }
+        }
+
+        const updatedPost = await Post.findByIdAndUpdate(postId, updatedData ,{ new: true }).populate('author', 'name username profile').populate('likes', 'name username profile')
+
+        return res.status(200).json({
+            success: true,
+            message: 'Post updated',
+            post: updatedPost
+        })
+        
+    } catch(err) {
+        return res.status(400).json({
+            success: false,
+            message: 'Something went wrong',
+            error: err
+        })
+    }
+}
+
+export const delete_post = async (req, res, next) => {
+    try{
+
+        const { postId } = req.params
+
+        const post = await Post.findById(postId)
+
+        if(!post){
+            return res.status(404).json({
+                success: false,
+                message: 'Post not found'
+            })
+        }
+
+        await Post.findByIdAndDelete(postId)
+
+        return res.status(200).json({
+            success: true,
+            message: 'Post deleted'
+        })
+
+    } catch(err) {
+        return res.status(400).json({
+            success: false,
+            message: 'Something went wrong',
+            error: err
+        })
+    } 
+}
+
 export const post_like = async (req, res, next) => {
     try{
 
