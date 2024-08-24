@@ -39,6 +39,16 @@ const commentsSlice = createSlice({
         showModal(state, action) {
             state.showComments = action.payload.showComments
             state.postId = action.payload.postId
+        },
+        updateComment(state, action){
+            const updatedComment = action.payload;
+            const index = state.comments.findIndex(comment => comment._id === updatedComment._id);
+            if (index !== -1) {
+                state.comments[index] = updatedComment;
+            }
+        },
+        deleteComment(state, action){
+            state.comments = state.comments.filter((comment) => comment._id != action.payload)
         }
     },
     extraReducers: (builder) => {
@@ -52,6 +62,6 @@ const commentsSlice = createSlice({
     }
 })
 
-export const { addComment, showModal } = commentsSlice.actions
+export const { addComment, showModal, updateComment, deleteComment } = commentsSlice.actions
 
 export default commentsSlice.reducer
