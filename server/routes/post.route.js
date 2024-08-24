@@ -11,7 +11,7 @@ Router.get('/', get_posts)
 Router.post('/', isAuthenticated, postImageUploader, create_post)
 
 Router.get('/:postId', get_post)
-Router.post('/:postId', isAuthenticated, isAuthor, update_post)
+Router.put('/:postId', isAuthenticated, isAuthor, update_post)
 Router.delete('/:postId', isAuthenticated, isAuthor, delete_post)
 
 Router.post('/like/:postId', isAuthenticated, post_like)

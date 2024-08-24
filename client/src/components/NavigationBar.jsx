@@ -7,7 +7,7 @@ import { MdFeed, MdHome } from "react-icons/md";
 
 import { logout } from '../redux/slice/authSlice'
 
-const NavigationBar = ({ setShowCommentSectionModal }) => {
+const NavigationBar = ({ setShowPostCreateModal }) => {
 
   // const [selectedItem, setSelectedItem] = useState('')
   const dispatch = useDispatch()

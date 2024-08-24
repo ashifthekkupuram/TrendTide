@@ -37,6 +37,9 @@ const postsSlice = createSlice({
         },
         createPost(state, action) {
             state.push(action.payload)
+        },
+        deletePost(state, action){
+            return state.filter((post) => post._id != action.payload.postId)
         }
     },
     extraReducers: (builder) => {
@@ -50,6 +53,6 @@ const postsSlice = createSlice({
     }
 })
 
-export const { updatePost, createPost } = postsSlice.actions
+export const { updatePost, createPost, deletePost } = postsSlice.actions
 
 export default postsSlice.reducer

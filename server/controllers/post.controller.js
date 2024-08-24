@@ -93,7 +93,8 @@ export const create_post = async (req, res, next) => {
 
         return res.status(200).json({
             success: true,
-            message: 'Post created'
+            message: 'Post created',
+            post
         })
 
     } catch(err) {

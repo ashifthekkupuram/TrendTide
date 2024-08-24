@@ -7,6 +7,8 @@ import { MdOutlineModeComment } from "react-icons/md";
 import axios from '../api/axios'
 import { updatePost } from '../redux/slice/postsSlice';
 import { showModal } from '../redux/slice/commentsSlice';
+import { setDeletePost } from '../redux/slice/deletePostSlice';
+import { setEditPost } from '../redux/slice/editPostSlice';
 
 const Post = ({ post }) => {
 
@@ -50,6 +52,14 @@ const Post = ({ post }) => {
     dispatch(showModal({showComments: true, postId: post._id}))
   }
 
+  const onDeletePostClick = (e) => {
+    dispatch(setDeletePost({ show: true, postId: post._id, postName: post.caption }))
+  }
+
+  const onEditPostClick = (e) => {
+    dispatch(setEditPost({ show: true, postId: post._id, postName: post.caption }))
+  }
+
   const hasLiked = post.likes.some(like => like._id === UserData._id);
 
   return (
@@ -64,8 +74,8 @@ const Post = ({ post }) => {
           •••
           </Dropdown.Toggle>
           <Dropdown.Menu>
-            <Dropdown.Item href="#/action-1">Edit Post</Dropdown.Item>
-            <Dropdown.Item href="#/action-2">Delete Post</Dropdown.Item>
+            <Dropdown.Item onClick={onEditPostClick}>Edit Post</Dropdown.Item>
+            <Dropdown.Item onClick={onDeletePostClick}>Delete Post</Dropdown.Item>
           </Dropdown.Menu>
         </Dropdown>
       </Card.Header>

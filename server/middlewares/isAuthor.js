@@ -26,9 +26,6 @@ const isAuthor = async (req, res, next) => {
             })
         }
 
-        console.log(user)
-        console.log(post)
-
         if(post.author.toString() == user._id.toString()){
             next()
         }else{

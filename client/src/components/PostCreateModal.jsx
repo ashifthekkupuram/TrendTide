@@ -1,9 +1,10 @@
 import React, { useState, useRef } from 'react'
 import { useSelector, useDispatch } from 'react-redux';
-import { Button, Modal, Form, Image } from 'react-bootstrap'
+import { Button, Modal, Form, Image, Alert } from 'react-bootstrap'
 import { GrGallery } from "react-icons/gr";
 
 import axios from '../api/axios';
+import { createPost } from '../redux/slice/postsSlice'
 
 const PostCreateModal = ({ showPostCreateModal, setShowPostCreateModal }) => {
 
@@ -11,6 +12,8 @@ const PostCreateModal = ({ showPostCreateModal, setShowPostCreateModal }) => {
     const [image, setImage] = useState(null)
     const [loading, setLoading] = useState(false)
     const [error, setError] = useState(null)
+
+    const dispatch = useDispatch()
 
     const { token } = useSelector( (state) => state.auth )
 
@@ -57,6 +60,8 @@ const PostCreateModal = ({ showPostCreateModal, setShowPostCreateModal }) => {
                 }
             })
 
+            dispatch(createPost(response.data.post))
+
             setShowPostCreateModal(false)
 
         } catch(err) {
@@ -78,6 +83,11 @@ const PostCreateModal = ({ showPostCreateModal, setShowPostCreateModal }) => {
                 <Modal.Title>Create Post</Modal.Title>
             </Modal.Header>
             <Modal.Body>
+            {error && <Alert variant="danger" dismissible>
+                                <p>
+                                    {error}
+                                </p>
+                            </Alert>}
                 <Form>
                     <Form.Group className="mb-3">
                         <Form.Control style={{ height: 'auto', border: 'none' }} className='shadow-none scroll' type="text" as='textarea' value={caption} id='caption' name='caption' placeholder="What's on your mind?" onChange={onChangeCaption} />
