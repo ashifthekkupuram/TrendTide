@@ -33,8 +33,6 @@ const Post = ({ post }) => {
       };
 
       dispatch(updatePost(updatedPost))
-
-      console.log(posts)
       
     } catch(err) {
       if(err.response){
@@ -69,7 +67,7 @@ const Post = ({ post }) => {
         <Image style={{width: '36px'}} src={post.author.profile} className='rounded' />
         {post.author.name.firstName} {post.author.name.secondName}
         </Container>
-        <Dropdown>
+        { (UserData._id == post.author._id) && <Dropdown>
           <Dropdown.Toggle className='' variant="link" id="dropdown-basic">
           •••
           </Dropdown.Toggle>
@@ -77,7 +75,7 @@ const Post = ({ post }) => {
             <Dropdown.Item onClick={onEditPostClick}>Edit Post</Dropdown.Item>
             <Dropdown.Item onClick={onDeletePostClick}>Delete Post</Dropdown.Item>
           </Dropdown.Menu>
-        </Dropdown>
+        </Dropdown> }
       </Card.Header>
       { post.image && <Card.Img variant="top" src={`${import.meta.env.VITE_BACKEND_URL}/images/posts/${post.image}`} /> }
       <Card.Body>

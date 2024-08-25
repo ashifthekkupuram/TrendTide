@@ -89,15 +89,20 @@ export const create_post = async (req, res, next) => {
             author: user
         })
 
-        await post.save()
+        const savedPost  = await post.save()
+
+        const createdPost = await Post.findById(savedPost._id)
+            .populate('author', 'name username profile')
+            .populate('likes', 'name username profile')
 
         return res.status(200).json({
             success: true,
             message: 'Post created',
-            post
+            post: createdPost
         })
 
     } catch(err) {
+
         return res.status(400).json({
             success: false,
             message: 'Something went wrong',

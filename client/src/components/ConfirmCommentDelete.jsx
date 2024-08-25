@@ -24,7 +24,7 @@ const ConfirmCommentDelete = ({ commentDeletion, setCommentDeletion }) => {
           dispatch(deleteComment(commentDeletion.commentId))
           setCommentDeletion({show: false, commentId: null})
         } catch (err) {
-          console.log('Deletion failed')
+          
         }
       }
 

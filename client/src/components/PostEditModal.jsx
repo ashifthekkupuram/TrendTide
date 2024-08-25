@@ -39,8 +39,6 @@ const PostEditModal = () => {
         }
     }
 
-    console.log(form)
-
     useEffect(() => {
         if (postId) {
             setPostLoading(true)
@@ -50,7 +48,7 @@ const PostEditModal = () => {
                     const post = response.data.post
                     setForm({ ...form, caption: post.caption, image: post.image || '' })
                 } catch (err) {
-                    console.log(error)
+                    
                 } finally {
                     setPostLoading(false)
                 }

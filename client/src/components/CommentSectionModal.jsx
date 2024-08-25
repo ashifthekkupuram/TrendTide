@@ -99,7 +99,6 @@ const CommentSectionModal = () => {
       setError(null)
       const fetchPost = async () => {
         const result = await dispatch(fetchComments({postId}))
-        console.log(result.comments)
         if(!result.success){
           setError(result.message)
         }

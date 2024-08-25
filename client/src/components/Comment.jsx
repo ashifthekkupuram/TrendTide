@@ -38,9 +38,9 @@ const Comment = ({ comment, setCommentUpdation, setComment }) => {
           <Card.Text>
             {comment.text}
           </Card.Text>
-          {isPostAuthor || isCommentAuthor &&
-            <Card.Footer>
-              { isPostAuthor && <AiFillDelete color='red' onClick={onDelete} /> }
+          {(isPostAuthor || isCommentAuthor) &&
+            <Card.Footer className='d-flex align-items-center gap-2'>
+              { (isPostAuthor || isCommentAuthor) && <AiFillDelete color='red' onClick={onDelete} /> }
               { isCommentAuthor && <MdEdit color='grey' onClick={onEdit}  />}
             </Card.Footer>}
         </Card.Body>

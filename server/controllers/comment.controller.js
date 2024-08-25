@@ -71,15 +71,18 @@ export const create_comment = async (req, res, next) => {
             author: user
         })
 
-        await comment.save()
+        const savedComment = await comment.save()
+
+        const createdComment = await Comment.findById(savedComment._id).populate('author', 'name profile').populate('likes', 'name profile').populate('post', 'author')
 
         return res.status(200).json({
             success: true,
             message: 'Comment created',
-            comment
+            comment: createdComment
         })
 
     } catch(err) {
+
         return res.status(400).json({
             success: false,
             message: 'Something went wrong',

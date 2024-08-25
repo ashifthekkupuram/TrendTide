@@ -29,14 +29,14 @@ const postsSlice = createSlice({
     initialState,
     reducers: {
         updatePost(state, action) {
-            const updatedPost = action.payload;
-            const index = state.findIndex(post => post._id === updatedPost._id);
+            const updatedPost = action.payload
+            const index = state.findIndex(post => post._id === updatedPost._id)
             if (index !== -1) {
-                state[index] = updatedPost;
+                state[index] = updatedPost
             }
         },
         createPost(state, action) {
-            state.push(action.payload)
+            state.unshift(action.payload)
         },
         deletePost(state, action){
             return state.filter((post) => post._id != action.payload.postId)

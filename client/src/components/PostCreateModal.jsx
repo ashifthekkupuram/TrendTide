@@ -92,12 +92,12 @@ const PostCreateModal = ({ showPostCreateModal, setShowPostCreateModal }) => {
                     <Form.Group className="mb-3">
                         <Form.Control style={{ height: 'auto', border: 'none' }} className='shadow-none scroll' type="text" as='textarea' value={caption} id='caption' name='caption' placeholder="What's on your mind?" onChange={onChangeCaption} />
                     </Form.Group>
-                    <Form.Group className="mb-3">
+                    <Form.Group className="mb-3 d-flex flex-column">
                         <Form.Control ref={ImageInputRef} style={{ display: 'none' }} className='' type="file" id='image' name='image' onChange={onChangeImage} />
                         { image ? 
                         <>
                             <Image src={URL.createObjectURL(image)} fluid/>
-                            <Button style={{marginTop: '3px'}} variant='danger' onClick={onRemoveImage} >Remove Image</Button>
+                            <Button style={{marginTop: '3px', width: '150px'}} variant='danger' onClick={onRemoveImage} >Remove Image</Button>
                         </> : 
                         <>
                             <Button className='d-flex justify-content-center align-items-center gap-2' variant='success' onClick={TriggerFileInput} ><GrGallery />Image</Button>
