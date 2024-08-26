@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
-import { Button, Card, Container, Image, Spinner, Dropdown  } from 'react-bootstrap'
+import { Button, Card, Container, Image, Spinner, Dropdown, Badge } from 'react-bootstrap'
 import { AiOutlineLike, AiFillLike  } from "react-icons/ai";
 import { MdOutlineModeComment } from "react-icons/md";
 
@@ -9,6 +9,7 @@ import { updatePost } from '../redux/slice/postsSlice';
 import { showModal } from '../redux/slice/commentsSlice';
 import { setDeletePost } from '../redux/slice/deletePostSlice';
 import { setEditPost } from '../redux/slice/editPostSlice';
+import { follow } from '../redux/slice/authSlice'
 
 const Post = ({ post }) => {
 
@@ -17,6 +18,7 @@ const Post = ({ post }) => {
   const { token, UserData } = useSelector((state) => state.auth)
 
   const [likeLoading, setLikeLoading] = useState(false)
+  const [followLoading, setFollowLoading] = useState(false)
 
   const onLike = async () => {
     setLikeLoading(true)
@@ -46,6 +48,12 @@ const Post = ({ post }) => {
     }
   }
 
+  const onFollow = async (e) => {
+    setFollowLoading(true)
+    await dispatch(follow({userId: post.author._id, token}))
+    setFollowLoading(false)
+  }
+
   const onCommentClick = (e) => {
     dispatch(showModal({showComments: true, postId: post._id}))
   }
@@ -59,6 +67,7 @@ const Post = ({ post }) => {
   }
 
   const hasLiked = post.likes.some(like => like._id === UserData._id);
+  const isFollowing = UserData?.followings.some(following => following._id === post.author._id);
 
   return (
     <Card style={{ width: '100%' }}>
@@ -66,6 +75,7 @@ const Post = ({ post }) => {
         <Container style={{fontSize: '20px', fontWeight: '600'}} className='d-flex align-items-center gap-2'>
         <Image style={{width: '36px'}} src={post.author.profile} className='rounded' />
         {post.author.name.firstName} {post.author.name.secondName}
+        { (UserData?._id != post.author._id) && ( isFollowing ? <Badge bg='danger' onClick={onFollow}>{followLoading ? 'Loading..': 'unfollow'} </Badge> : <Badge bg='secondary' onClick={onFollow}>{followLoading ? 'Loading..': 'follow'}</Badge> )}
         </Container>
         { (UserData._id == post.author._id) && <Dropdown>
           <Dropdown.Toggle className='' variant="link" id="dropdown-basic">

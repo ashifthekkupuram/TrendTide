@@ -39,6 +39,7 @@ export const follow_user = async (req, res, next) => {
                 success: true,
                 message: 'Unfollowed user',
                 followed: false,
+                userId: userId
             })
 
         }else{

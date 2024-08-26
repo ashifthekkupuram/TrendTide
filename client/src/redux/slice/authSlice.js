@@ -66,6 +66,30 @@ export const logout = createAsyncThunk(
     }
 )
 
+export const follow = createAsyncThunk(
+    'auth?follow',
+    async ( credentials, {rejectWithValue} ) => {
+        try{
+            const response = await axios.post(`/user/follow/${credentials.userId}`, {}, {headers: {
+                authorization: `Bearer ${credentials.token}`
+            }})
+
+            return response.data
+
+        } catch(err) {
+            if(err.response){
+                return rejectWithValue(err.response.data)
+            }
+            
+            if(err.request){
+                return rejectWithValue({ success: false, message: 'Internal Server Error'})
+            }
+
+            return rejectWithValue({ success: false, message: err.message })
+        }
+    }
+)
+
 const authSlice = createSlice({
     name: 'auth',
     initialState,
@@ -93,6 +117,16 @@ const authSlice = createSlice({
         })
         .addCase(logout.rejected, () => {
            // Do nothing for now
+        })
+        .addCase(follow.fulfilled, (state, action) => {
+            if(action.payload.followed){
+                state.UserData.followings.push(action.payload.user)
+            }else{
+                state.UserData.followings = state.UserData.followings.filter(f => f._id != action.payload.userId)
+            }
+        })
+        .addCase(follow.rejected, () => {
+            // Do nothing for now
         })
     }
 })
