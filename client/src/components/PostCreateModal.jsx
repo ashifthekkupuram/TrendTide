@@ -64,6 +64,10 @@ const PostCreateModal = ({ showPostCreateModal, setShowPostCreateModal }) => {
 
             setShowPostCreateModal(false)
 
+            setCaption('')
+            setImage(null)
+            ImageInputRef.current.value = null
+
         } catch(err) {
 
             if(err.response){

@@ -78,7 +78,19 @@ export const login =  async (req, res, next) => {
                 email: user.email,
                 username: user.username,
                 profile: user.profile,
-                name: user.name
+                name: user.name,
+                followers: user.followers.map(follower => ({
+                    _id: follower._id,
+                    username: follower.username,
+                    name: follower.name,
+                    profile: follower.profile
+                })),
+                followings: user.followings.map(following => ({
+                    _id: following._id,
+                    username: following.username,
+                    name: following.name,
+                    profile: following.profile
+                }))
             }
         })
 
@@ -225,7 +237,19 @@ export const refresh = async (req, res, next) => {
                         email: foundUser.email,
                         username: foundUser.username,
                         profile: foundUser.profile,
-                        name: foundUser.name
+                        name: foundUser.name,
+                        followers: foundUser.followers.map(follower => ({
+                            _id: follower._id,
+                            username: follower.username,
+                            name: follower.name,
+                            profile: follower.profile
+                        })),
+                        followings: foundUser.followings.map(following => ({
+                            _id: following._id,
+                            username: following.username,
+                            name: following.name,
+                            profile: following.profile
+                        }))
                     }
                 })
 

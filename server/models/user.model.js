@@ -54,6 +54,16 @@ const UserSchema = new Schema({
             default: false
         }
     },
+    followers: [{
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        default: []
+    }],
+    followings : [{
+        type: Schema.Types.ObjectId,
+        ref: 'User',
+        default: []
+    }],
     verified: {
         type: Boolean,
         default: false

@@ -31,7 +31,7 @@ const Home = () => {
     <Container className='d-flex flex-column justify-content-start align-items-center mt-4 gap-3'>
       {loading ? <Spinner />: error ? <h1 style={{fontSize: '50px', color: 'red'}}>{error}</h1> :
         <>
-          { posts ? posts.map((item) => <Post key={item._id} post={item} />) : <h1 style={{fontSize: '50px', color: 'red'}}>There is no posts</h1> }
+          { posts.length > 0 ? posts.map((item) => <Post key={item._id} post={item} />) : <h1 style={{fontSize: '50px'}}>There is no posts</h1> }
         </>
       }
     </Container>
