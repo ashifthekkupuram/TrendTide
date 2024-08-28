@@ -24,8 +24,8 @@ const Comment = ({ comment, setCommentUpdation, setComment }) => {
     setComment(comment.text)
   }
 
-  const isCommentAuthor = UserData._id === comment.author._id;
-  const isPostAuthor = UserData._id === comment.post.author;
+  const isCommentAuthor = (UserData._id === comment.author._id) || false;
+  const isPostAuthor = (UserData._id === comment.post.author) || false;
 
   return (
     <>

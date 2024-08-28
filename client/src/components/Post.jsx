@@ -68,8 +68,8 @@ const Post = ({ post }) => {
     dispatch(setEditPost({ show: true, postId: post._id, postName: post.caption }))
   }
 
-  const hasLiked = post.likes.some(like => like._id === UserData._id);
-  const isFollowing = UserData?.followings?.some(following => following._id === post.author._id);
+  const hasLiked = post.likes.some(like => like._id === UserData._id) || false;
+  const isFollowing = UserData?.followings?.some(following => following._id === post.author._id) || false;
 
   return (
     <Card style={{ width: '100%' }}>

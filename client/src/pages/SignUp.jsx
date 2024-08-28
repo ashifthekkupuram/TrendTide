@@ -32,7 +32,7 @@ const SignUp = () => {
     try {
       const response = await axios.post('/auth/register/', { email: form.email, password: form.password1 })
       navigate('/login')
-      toast(response.data.message)
+      toast.success(response.data.message)
     } catch (err) {
       if (err?.response) {
         setError(err?.response?.data?.message)
