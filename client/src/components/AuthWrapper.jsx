@@ -12,7 +12,7 @@ const AuthWrapper = () => {
   useEffect(() => {
     dispatch(refresh()).then((result) => {
       if (result.payload.success) {
-        navigate('/')
+        
       } else {
 
       }

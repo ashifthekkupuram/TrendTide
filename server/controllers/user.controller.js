@@ -7,7 +7,7 @@ export const get_profile = async (req, res, next) => {
 
         const { userId } = req.params
 
-        const user = await User.findById(userId).populate('username profile name gender DOB').populate('followers follwings','name profile username')
+        const user = await User.findById(userId, 'username name profile DOB').populate('followers followings','name profile username')
 
         if(!user){
             return res.status(400).json({
@@ -23,6 +23,7 @@ export const get_profile = async (req, res, next) => {
         })
 
     } catch(err) {
+
         res.status(400).json({
             success: false,
             message: 'Something went wrong',

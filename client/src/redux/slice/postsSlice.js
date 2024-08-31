@@ -8,7 +8,7 @@ export const fetchPosts = createAsyncThunk(
     'posts/fetchPosts',
     async (credentials, { rejectWithValue }) => {
         try {
-            const response = await axios.get('/post')
+            const response = await axios.get(`/post?userId=${credentials.userId || ''}`)
             return response.data
         } catch (err) {
             if (err.response) {

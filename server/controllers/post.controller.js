@@ -6,7 +6,16 @@ import User from '../models/user.model.js'
 export const get_posts = async (req, res, next) => {
     try{
 
-        const posts = await Post.find({}).populate('author', 'name username profile').populate('likes', 'name username profile').sort('-createdAt')
+        const { userId } = req.query
+        const filter = {}
+
+        console.log(userId)
+
+        if(userId){
+            filter.author = userId
+        }
+
+        const posts = await Post.find(filter).populate('author', 'name username profile').populate('likes', 'name username profile').sort('-createdAt')
 
         return res.status(200).json({
             success: true,
