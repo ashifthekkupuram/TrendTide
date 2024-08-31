@@ -3,7 +3,7 @@ import { createBrowserRouter, RouterProvider, Link } from 'react-router-dom'
 
 import './App.css'
 
-import { Home, Login, SignUp, ResetPassword, ResetConfirmPassword, VerifyAccount } from './pages'
+import { Home, Login, SignUp, ResetPassword, ResetConfirmPassword, VerifyAccount, Profile } from './pages'
 import AuthWrapper from './components/AuthWrapper.jsx'
 import AuthRedirect from './components/AuthRedirect.jsx'
 import NavWrapper from './components/NavWrapper.jsx'
@@ -22,6 +22,10 @@ function App() {
             {
               path: '/',
               element: <Home />
+            },
+            {
+              path: '/profile/:userId',
+              element: <Profile />
             }
           ]
         },

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useDispatch } from 'react-redux'
 import { Form, Container, Button, Alert, Image } from 'react-bootstrap'
-import { ToastContainer } from 'react-toastify'
+import { Toaster } from 'react-hot-toast'
 import 'react-toastify/dist/ReactToastify.css';
 
 import { login } from '../redux/slice/authSlice'
@@ -42,6 +42,7 @@ const Login = () => {
 
   return (
     <>
+    <Toaster position="top-right" reverseOrder={false} />
       <Container className='d-flex vh-100 w-100 p-0' fluid >
         <Container style={{ padding: '50px', flex: 1 }} className='d-none d-xl-flex flex-column align-items-center vh-100 w-50' fluid>
           <Image src={LogoBlack} style={{ width: '150px', marginRight: 'auto' }} />
@@ -71,7 +72,6 @@ const Login = () => {
           </Container>
         </Container>
       </Container>
-      <ToastContainer />
     </>
   )
 }

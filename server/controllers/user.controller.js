@@ -2,6 +2,35 @@ import jwt from 'jsonwebtoken'
 
 import User from '../models/user.model.js'
 
+export const get_profile = async (req, res, next) => {
+    try{
+
+        const { userId } = req.params
+
+        const user = await User.findById(userId).populate('username profile name gender DOB').populate('followers follwings','name profile username')
+
+        if(!user){
+            return res.status(400).json({
+                success: false,
+                message: 'User not found'
+            })
+        }
+
+        return res.status(200).json({
+            success: true,
+            message: 'User retreived',
+            user
+        })
+
+    } catch(err) {
+        res.status(400).json({
+            success: false,
+            message: 'Something went wrong',
+            error: err
+        })
+    }
+}
+
 export const follow_user = async (req, res, next) => {
     try{
 
