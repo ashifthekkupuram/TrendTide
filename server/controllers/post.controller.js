@@ -9,8 +9,6 @@ export const get_posts = async (req, res, next) => {
         const { userId } = req.query
         const filter = {}
 
-        console.log(userId)
-
         if(userId){
             filter.author = userId
         }
@@ -24,6 +22,9 @@ export const get_posts = async (req, res, next) => {
         })
 
     } catch (err) {
+
+        console.log(err)
+
         return res.status(400).json({
             success: false,
             message: 'Something went wrong',
