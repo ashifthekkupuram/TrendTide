@@ -1,5 +1,5 @@
 import React,{ useState } from 'react'
-import { Card, Image,Badge } from 'react-bootstrap'
+import { Card, Image,Button } from 'react-bootstrap'
 import { useDispatch, useSelector } from 'react-redux'
 
 import { follow } from '../redux/slice/authSlice'
@@ -25,9 +25,10 @@ const ProfileCard = ({ user }) => {
             <Image style={{height: '45px', width: '45px', marginRight: '8px'}} src={user?.profile} />
             <h5 style={{margin: 0}}>{user?.name.firstName} {user?.name.secondName}</h5>
         </div>
-        {( token && (UserData?._id != user._id) && (isFollowing ? <Badge onClick={!followLoading ? onFollow : undefined}
-            style={{ pointerEvents: followLoading ? 'none' : 'auto', opacity: followLoading ? 0.6 : 1 }} bg='danger'>{followLoading ? 'Loading..' : 'unfollow'} </Badge> : <Badge onClick={!followLoading ? onFollow : undefined}
-              style={{ pointerEvents: followLoading ? 'none' : 'auto', opacity: followLoading ? 0.6 : 1 }} bg='secondary'>{followLoading ? 'Loading..' : 'follow'}</Badge>) )}
+        {( token && (UserData?._id != user._id) && (isFollowing ? <Button onClick={!followLoading ? onFollow : undefined}
+            disabled={followLoading} variant='danger'>{followLoading ? 'Loading..' : 'unfollow'} </Button> : 
+            <Button onClick={!followLoading ? onFollow : undefined}
+            disabled={followLoading} variant='secondary'>{followLoading ? 'Loading..' : 'follow'}</Button>) )}
     </Card>
   )
 }

@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { Button, Card, Container, Image, Spinner, Dropdown, Badge } from 'react-bootstrap'
 import { AiOutlineLike, AiFillLike } from "react-icons/ai";
 import { MdOutlineModeComment } from "react-icons/md";
+import { useNavigate } from 'react-router-dom'
 
 import axios from '../api/axios'
 import { updatePost } from '../redux/slice/postsSlice';
@@ -13,6 +14,7 @@ import { follow } from '../redux/slice/authSlice'
 
 const Post = ({ post }) => {
 
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const posts = useSelector((state) => state.posts)
   const { token, UserData } = useSelector((state) => state.auth)
@@ -74,7 +76,7 @@ const Post = ({ post }) => {
   return (
     <Card style={{ width: '100%' }}>
       <Card.Header className='d-flex justify-content-between align-items-center'>
-        <Container style={{ fontSize: '20px', fontWeight: '600' }} className='d-flex align-items-center gap-2'>
+        <Container style={{ fontSize: '20px', fontWeight: '600' }} className='d-flex align-items-center gap-2' onClick={()=>navigate(`/profile/${post.author._id}`)}>
           <Image style={{ width: '36px' }} src={post.author.profile} className='rounded' />
           {post.author.name.firstName} {post.author.name.secondName}
           {( token && (UserData?._id != post.author._id) && (isFollowing ? <Badge onClick={!followLoading ? onFollow : undefined}

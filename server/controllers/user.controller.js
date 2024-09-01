@@ -1,6 +1,7 @@
 import jwt from 'jsonwebtoken'
 
 import User from '../models/user.model.js'
+import Post from '../models/post.model.js'
 
 export const get_profile = async (req, res, next) => {
     try{
@@ -16,10 +17,13 @@ export const get_profile = async (req, res, next) => {
             })
         }
 
+        const posts_count = await Post.countDocuments({ author: user._id })
+
         return res.status(200).json({
             success: true,
             message: 'User retreived',
-            user
+            user,
+            posts_count
         })
 
     } catch(err) {
