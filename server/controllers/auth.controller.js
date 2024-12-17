@@ -26,7 +26,7 @@ export const login =  async (req, res, next) => {
             })
         }
 
-        const user = await User.findOne({ email })
+        const user = await User.findOne({ email }).populate('name')
 
         if(!user){
             return res.status(400).json({
@@ -55,7 +55,8 @@ export const login =  async (req, res, next) => {
             'UserInfo': {
                 _id: user._id,
                 email: user.email,
-                username: user.username
+                username: user.username,
+                name: user.name
             }
         }, ACCESS_SECRET_KEY, {expiresIn: '5m'} )
 
@@ -73,9 +74,23 @@ export const login =  async (req, res, next) => {
             message: 'Logged in successfully',
             accessToken,
             userData: {
+                _id: user._id,
                 email: user.email,
                 username: user.username,
-                profile: user.profile
+                profile: user.profile,
+                name: user.name,
+                followers: user.followers.map(follower => ({
+                    _id: follower._id,
+                    username: follower.username,
+                    name: follower.name,
+                    profile: follower.profile
+                })),
+                followings: user.followings.map(following => ({
+                    _id: following._id,
+                    username: following.username,
+                    name: following.name,
+                    profile: following.profile
+                }))
             }
         })
 
@@ -194,7 +209,7 @@ export const refresh = async (req, res, next) => {
                     })
                 }
 
-                const foundUser = await User.findById(decoded._id)
+                const foundUser = await User.findById(decoded._id).populate('name')
 
                 if(!foundUser){
                     return res.status(401).json({
@@ -207,7 +222,8 @@ export const refresh = async (req, res, next) => {
                     { "UserInfo": {
                         _id: foundUser._id,
                         email: foundUser.email,
-                        username: foundUser.username
+                        username: foundUser.username,
+                        name: foundUser.name
                     } },
                     ACCESS_SECRET_KEY,
                     {expiresIn: '5m'}
@@ -217,9 +233,23 @@ export const refresh = async (req, res, next) => {
                     success: true,
                     accessToken,
                     userData: {
+                        _id: foundUser._id,
                         email: foundUser.email,
                         username: foundUser.username,
-                        profile: foundUser.profile
+                        profile: foundUser.profile,
+                        name: foundUser.name,
+                        followers: foundUser.followers.map(follower => ({
+                            _id: follower._id,
+                            username: follower.username,
+                            name: follower.name,
+                            profile: follower.profile
+                        })),
+                        followings: foundUser.followings.map(following => ({
+                            _id: following._id,
+                            username: following.username,
+                            name: following.name,
+                            profile: following.profile
+                        }))
                     }
                 })
 

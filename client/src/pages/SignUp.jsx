@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { toast } from 'react-toastify'
+import { toast } from 'react-hot-toast'
 
 import { Form, Container, Button, Alert, Image } from 'react-bootstrap'
 
@@ -32,7 +32,7 @@ const SignUp = () => {
     try {
       const response = await axios.post('/auth/register/', { email: form.email, password: form.password1 })
       navigate('/login')
-      toast(response.data.message)
+      toast.success(response.data.message)
     } catch (err) {
       if (err?.response) {
         setError(err?.response?.data?.message)
